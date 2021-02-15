@@ -6,14 +6,15 @@ import reducer, { initialState } from "./reducer";
 // import { StateProvider } from "./StateProvider";
 import * as serviceWorker from "./serviceWorker";
 import { StateProvider } from "./Component/templet/StateProvider";
+import store from "./store";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <StateProvider initialState={initialState} reducer={reducer}>
-      <App />
-    </StateProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+	<React.StrictMode>
+		<StateProvider initialState={initialState} reducer={reducer} store={store}>
+			<App />
+		</StateProvider>
+	</React.StrictMode>,
+	document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

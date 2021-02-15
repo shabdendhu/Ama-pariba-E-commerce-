@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import routes from "../../router";
 import PageSkeleton from "./skeleton";
+import { Provider } from 'react-redux'
+
+import store from "../../store/index"
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,6 +13,7 @@ import {
 
 const MainComponent = () => {
   return (
+    <Provider store={store}>
     <React.Suspense fallback={<PageSkeleton />}>
       <Router>
         <Switch>
@@ -27,6 +31,8 @@ const MainComponent = () => {
         </Switch>
       </Router>
     </React.Suspense>
+    </Provider>
+
   );
 };
 export default MainComponent;

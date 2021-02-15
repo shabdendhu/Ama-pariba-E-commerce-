@@ -3,18 +3,21 @@ import React, { useEffect } from "react";
 import Header from "./header";
 import HomeBanner from "./banner";
 import Products from "../Cards/productsList";
+import CategoryforHome2 from "../category/CategoryforHome2";
+import CategoryforHome1 from "../category/CategoryforHome1";
+import Productfinder from "./Productfinder";
 
 const Home = () => {
-  return (
-    <>
-      <Header />
-      <div style={{ marginTop: "50px" }}>
-        <HomeBanner />
-
-        <Products />
-      </div>
-    </>
-  );
+	return (
+		<>
+			<Header />
+			<div style={{ marginTop: "50px" }}>
+				<HomeBanner />
+				<CategoryforHome2 />
+				<Products />
+			</div>
+		</>
+	);
 };
 
 export default Home;
