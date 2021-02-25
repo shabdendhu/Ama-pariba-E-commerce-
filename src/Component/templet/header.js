@@ -1,30 +1,31 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import SearchIcon from "@material-ui/icons/Search";
-import {
-	Card,
-	IconButton,
-	Icon,
-	Drawer,
-	Button,
-	ListItem,
-	ListItemSecondaryAction,
-	List,
-	ListItemText,
-	Divider,
-} from "@material-ui/core";
+import ArrowbackIcon from "@material-ui/icons/ArrowBack";
+
+import { Card, IconButton, Icon, Drawer, Divider } from "@material-ui/core";
 import { useState } from "react";
 import { useStateValue } from "./StateProvider";
 import Productfinder from "./Productfinder";
 import { useEffect } from "react";
+import { userLogout } from "../../actions/authorization";
+import { useDispatch } from "react-redux";
+import { user_info } from "../../constants/storage-keys";
 
 const Header = ({ pagetitle }) => {
 	const [{ basket }] = useStateValue();
 	const logedin = false;
+	const dispatch = useDispatch();
+
 	const [openSearchDilog, setOpenSearchDilog] = useState(false);
 	const [openSideNav, setOpenSideNav] = useState(false);
+	const logout = () => {
+		dispatch(userLogout());
+		localStorage.removeItem(user_info);
+		setOpenSideNav(false);
+	};
 	useEffect(() => {
 		if (openSideNav) {
 			document.body.style.overflow = "hidden";
@@ -47,18 +48,31 @@ const Header = ({ pagetitle }) => {
 						zIndex: 99,
 						width: "-webkit-fill-available",
 						top: 0,
+						borderRadius: 0,
 					}}
 				>
 					<div>
-						<IconButton
-							onClick={() => {
-								setOpenSideNav(true);
-							}}
-						>
-							<Icon>
-								<MenuIcon style={{ color: "white" }} />
-							</Icon>
-						</IconButton>
+						{pagetitle ? (
+							<IconButton
+								color="inherit"
+								aria-label="Open drawer"
+								onClick={() => {
+									window.history.go("-1");
+								}}
+							>
+								<ArrowbackIcon />
+							</IconButton>
+						) : (
+							<IconButton
+								onClick={() => {
+									setOpenSideNav(true);
+								}}
+							>
+								<Icon>
+									<MenuIcon style={{ color: "white" }} />
+								</Icon>
+							</IconButton>
+						)}
 					</div>
 					<div
 						style={{
@@ -71,7 +85,7 @@ const Header = ({ pagetitle }) => {
 							<Link
 								style={{
 									textDecoration: "none",
-									fontSize: "25px",
+									fontSize: "20px",
 									color: "white",
 									textDecoration: "none",
 								}}
@@ -161,12 +175,12 @@ const Header = ({ pagetitle }) => {
 					onClose={() => {
 						setOpenSideNav(false);
 					}}
-					fullWidth={true}
+					// fullWidth={true}
 				>
 					<div
 						style={{
 							width: "calc(100vw - 173px)",
-							padding: "10px",
+							// padding: "10px",
 							height: "-webkit-fill-available",
 						}}
 					>
@@ -175,11 +189,14 @@ const Header = ({ pagetitle }) => {
 						>
 							<div
 								style={{
-									backgroundColor: "gray",
-									height: "30px",
+									backgroundColor: "rgb(89, 26, 7)",
+									height: "35px",
 									width: "100%",
 									marginBottom: "10px",
-									borderRadius: "5px",
+									display: "flex",
+									alignItems: "center",
+
+									// borderRadius: "5px",
 								}}
 							>
 								<span
@@ -189,11 +206,11 @@ const Header = ({ pagetitle }) => {
 										marginLeft: "10px",
 									}}
 								>
-									eco~Green
+									ଆମ ପରିବା
 								</span>
 							</div>
 
-							<div>
+							<div style={{ padding: "5px" }}>
 								<Link
 									onClick={() => {
 										setOpenSideNav(false);
@@ -226,7 +243,7 @@ const Header = ({ pagetitle }) => {
 									</div>
 								</Link>
 								<Divider />{" "}
-								<Link
+								{/* <Link
 									onClick={() => {
 										setOpenSideNav(false);
 									}}
@@ -241,7 +258,7 @@ const Header = ({ pagetitle }) => {
 										About
 									</div>
 								</Link>
-								<Divider />{" "}
+								<Divider />	 */}
 								<Link
 									onClick={() => {
 										setOpenSideNav(false);
@@ -254,10 +271,22 @@ const Header = ({ pagetitle }) => {
 									}}
 								>
 									<div style={{ padding: "7px 4px", fontSize: "23px" }}>
-										{" "}
 										Login
 									</div>
 								</Link>
+								<Divider />
+								<div
+									onClick={logout}
+									style={{
+										color: "black",
+										textDecoration: "none",
+										fontSize: "20px",
+									}}
+								>
+									<div style={{ padding: "7px 4px", fontSize: "23px" }}>
+										logout
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -268,4 +297,4 @@ const Header = ({ pagetitle }) => {
 	);
 };
 
-export default Header;
+export default withRouter(Header);

@@ -1,12 +1,15 @@
 import { Card, Grid } from "@material-ui/core";
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { get_recipe_list } from "../../constants/api";
 const CategoryItem = ({ item }) => {
+	const history = useHistory();
+
 	return (
 		<>
 			<div
-				// onClick={() => {
-
-				// }}
 				style={{
 					display: "flex",
 					flexDirection: "column",
@@ -34,45 +37,43 @@ const CategoryItem = ({ item }) => {
 					<br />
 
 					<img
+						onClick={() => {
+							const pagename = item.name.replace(/ +/g, "");
+							history.push(`/recipe-details?id=${item.id}?name=${pagename}`);
+						}}
 						style={{
 							height: "50px",
 							padding: "5px",
 						}}
-						src={item.image}
+						src={item.icon}
 					/>
 				</div>
-				<span style={{ fontWeight: 400 }}>{item.name}</span>
+				<span style={{ fontWeight: 400, textAlign: "center" }}>
+					{item.name}
+				</span>
 			</div>
 		</>
 	);
 };
-const CategoryforHome1 = () => {
-	const CommonDiseases = [
-		"biriyani.png",
-		"butterpanir.png",
-		"chikentikka.png",
-		"chilichiken.png",
-		"manchuriyan.png",
-		"tandurinan.png",
-	];
-	const items = [
-		{ name: "Biriyani", image: "biriyani.png" },
-		{ name: "Butterpanir", image: "butterpanir.png" },
-		{ name: "Chikentikka", image: "chikentikka.png" },
-		{ name: "Chilichiken", image: "chilichiken.png" },
-		{ name: "Manchuriyan", image: "manchuriyan.png" },
-		{ name: "Tandurinan", image: "tandurinan.png" },
-		{ name: "Biriyani", image: "biriyani.png" },
-		{ name: "Manchuriyan", image: "manchuriyan.png" },
-		{ name: "Chikentikka", image: "chikentikka.png" },
-		{ name: "Tandurinan", image: "tandurinan.png" },
-		{ name: "Butterpanir", image: "butterpanir.png" },
-		{ name: "Chikentikka", image: "chikentikka.png" },
-	];
+const CategoryforHome1 = ({ all }) => {
+	const [recipeList, setRecipeList] = useState([]);
+	useEffect(() => {
+		if (all) {
+			axios.get(get_recipe_list).then((response) => {
+				console.log(response.data.data);
+				setRecipeList(response.data.data);
+			});
+		} else {
+			axios.get(`${get_recipe_list}/1`).then((response) => {
+				console.log(response.data.data);
+				setRecipeList(response.data.data);
+			});
+		}
+	}, []);
 	return (
 		<div style={{ background: "#efefef" }}>
 			<Grid container>
-				{items.map((item, index) => (
+				{recipeList.map((item, index) => (
 					<Grid item xs={4} key={index}>
 						<CategoryItem item={item} />
 					</Grid>

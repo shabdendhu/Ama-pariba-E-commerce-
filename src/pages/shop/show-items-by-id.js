@@ -4,15 +4,17 @@ import HomeBanner from "../../Component/templet/banner";
 import ProductsByCategory from "../../Component/Cards/productsByCategorys";
 
 const shopByCategory = () => {
-  return (
-    <>
-      <Header />
-      <div style={{ marginTop: "50px" }}>
-        <HomeBanner />
-        <ProductsByCategory id={10} />
-      </div>
-    </>
-  );
+	var url = window.location.search;
+	var pagetitle = url.substring(url.lastIndexOf("=") + 1);
+	return (
+		<>
+			<Header pagetitle={pagetitle} />
+			<div style={{ marginTop: "50px" }}>
+				<HomeBanner />
+				<ProductsByCategory id={10} />
+			</div>
+		</>
+	);
 };
 
 export default shopByCategory;

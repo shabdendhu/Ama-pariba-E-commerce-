@@ -83,7 +83,7 @@ const Login = () => {
 			{/* {islo} */}
 			<div
 				style={{
-					backgroundColor: "white",
+					backgroundColor: "#efefef",
 					marginTop: "90px",
 					width: "-webkit-fill-available",
 				}}

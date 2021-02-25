@@ -9,7 +9,7 @@ import Close from "@material-ui/icons/Close";
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
 });
-const Productfinder = ({ openSearchDilog, onSelectMarket }) => {
+const Productfinder = ({ openSearchDilog, onSelectItems }) => {
 	const [open, setOpen] = useState(true);
 	const [searchText, setSearchText] = useState("");
 	const [sarchResult, setSarchResult] = useState([]);
@@ -117,7 +117,8 @@ const Productfinder = ({ openSearchDilog, onSelectMarket }) => {
 											</span>
 											<button
 												onClick={() => {
-													window.location.href = "/";
+													window.location.href = `/search-results?id=${market.product_category_id}?name=${market.product_name}`;
+													// console.log(market);
 												}}
 												style={{
 													position: "absolute",

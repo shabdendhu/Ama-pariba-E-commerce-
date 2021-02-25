@@ -11,13 +11,59 @@ import { make_new_order } from "../../constants/api";
 import axios from "axios";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+
+const EmptyBasketNotication = () => {
+	const history = useHistory();
+	return (
+		<div
+			style={{
+				background: "#efefef",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				marginTop: "170px",
+				flexDirection: "column",
+			}}
+		>
+			<img
+				src="emptybasket.png"
+				style={{ width: "200px", borderRadius: "30px" }}
+			/>
+			<div> YOUR BASKET IS EMPTY</div>
+			{/* <div> */}
+			<button
+				onClick={() => {
+					history.push("/");
+				}}
+				style={{
+					backgroundColor: "#9e2121",
+					margin: "30px",
+					height: "35px",
+					width: "50%",
+					color: "white",
+					border: "none",
+					outline: "none",
+					borderRadius: "5px",
+					fontSize: "17px",
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "space-around",
+				}}
+			>
+				START SHOPPING
+			</button>
+			{/* </div> */}
+		</div>
+	);
+};
 
 const Checkout = () => {
 	const [{ basket }] = useStateValue();
 	// const [{ user }] = useStateValue();
 	const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
 	const [apipauser, setApipauser] = useState(true);
-	console.log("isLoggedIn", isLoggedIn);
+	console.log("basket", basket);
 	var unique = [];
 	var distinct = [];
 	for (let i = 0; i < basket.length; i++) {
@@ -26,6 +72,9 @@ const Checkout = () => {
 			unique[basket[i].id] = 1;
 		}
 	}
+
+	console.log("uniq", unique);
+	console.log("distinct", distinct);
 	const makeOrder = () => {
 		basket.forEach((item, index) => {
 			if (apipauser === true) {
@@ -49,16 +98,16 @@ const Checkout = () => {
 	};
 	return (
 		<>
-			<Header pagetitle="Checkout" />
+			<Header pagetitle="My Basket" />
 			<div className="checkout">
 				<div className="checkout__left">
 					<div>
 						{basket.length === 0 ? (
 							<div>
-								<h2>your basket is empty</h2>
+								<EmptyBasketNotication />
 							</div>
 						) : (
-							<div>
+							<div style={{ background: "#efefef", marginTop: "50px" }}>
 								{basket.length > 0 && (
 									<div
 									// style={{ position: "fixed" }}
@@ -67,12 +116,12 @@ const Checkout = () => {
 											style={{
 												display: "flex",
 												flexDirection: "row",
-												height: "32px",
+												height: "40px",
 												padding: "10px",
-												backgroundColor: "#404240e8",
-												borderRadius: "3px",
+												paddingBottom: "10px",
+												backgroundColor: "gray",
 												position: "fixed",
-												bottom: "0px",
+												bottom: 0,
 												color: "white",
 												width: " -webkit-fill-available",
 											}}
@@ -80,10 +129,10 @@ const Checkout = () => {
 											<CurrencyFormat
 												renderText={(value) => (
 													<div>
-														<span>
+														<span style={{ paddingBottom: "10px" }}>
 															<b>Subtotal: </b>
 															<span style={{ paddingLeft: "5px" }}>
-																Rs{value}
+																Rs: {value}
 															</span>
 															<br />
 															<span>
@@ -128,18 +177,31 @@ const Checkout = () => {
 										</div>
 									</div>
 								)}
-								<h2 className="checkout__title">youre basket</h2>
-								{distinct.map((item, index) => (
-									<CheckoutProduct
-										key={index}
-										// count={count}
-										item={item}
-										id={item.id}
-										image={item.image}
-										price={item.price}
-										amount={item.amount}
-									/>
-								))}
+								<div
+									style={{
+										background: "white",
+										borderBottom: "1px solid gray",
+										borderTop: "1px solid gray",
+										// paddingBottom: "5px",
+										padding: "5px",
+										textAlign: "center",
+									}}
+								>
+									YOUR BASKET
+								</div>
+								<div style={{ marginBottom: "55px" }}>
+									{distinct.map((item, index) => (
+										<CheckoutProduct
+											key={item.id}
+											// count={count}
+											item={item}
+											id={item.id}
+											image={item.image}
+											price={item.price}
+											amount={item.amount}
+										/>
+									))}
+								</div>
 							</div>
 						)}
 					</div>

@@ -1,8 +1,18 @@
+import { IconButton } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useStateValue } from "../templet/StateProvider";
 
-const CustomButton = ({ id, image, name, amount, price, stage, count }) => {
+const CustomButton = ({
+	id,
+	image,
+	name,
+	amount,
+	price,
+	stage,
+	count,
+	width,
+}) => {
 	const [{ basket }, dispacher] = useStateValue();
 	// console.log("basket", basket);
 	const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
@@ -50,7 +60,7 @@ const CustomButton = ({ id, image, name, amount, price, stage, count }) => {
 						marginBottom: "5px",
 						marginLeft: "5px",
 						height: "35px",
-						width: "117px",
+						width: width,
 						color: "white",
 						border: "none",
 						outline: "none",
@@ -70,7 +80,7 @@ const CustomButton = ({ id, image, name, amount, price, stage, count }) => {
 						marginBottom: "5px",
 						marginLeft: "5px",
 						height: "35px",
-						width: "117px",
+						width: width,
 						color: "white",
 						border: "none",
 						outline: "none",
@@ -85,25 +95,25 @@ const CustomButton = ({ id, image, name, amount, price, stage, count }) => {
 						"REMOVE"
 					) : (
 						<>
-							<span
-								style={{ fontSize: "24px", fontWeight: 500 }}
+							<IconButton
+								style={{ fontSize: "24px", fontWeight: 500, color: "white" }}
 								onClick={() => {
 									addToBasket();
 								}}
 							>
 								+
-							</span>
+							</IconButton>
 							<span style={{ fontSize: "19px", fontWeight: 500 }}>
 								{itemAmt}
 							</span>
-							<span
-								style={{ fontSize: "24px", fontWeight: 500 }}
+							<IconButton
+								style={{ fontSize: "24px", fontWeight: 500, color: "white" }}
 								onClick={() => {
 									removeFromBasket();
 								}}
 							>
 								-
-							</span>
+							</IconButton>
 						</>
 					)}
 				</div>

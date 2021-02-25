@@ -23,3 +23,8 @@ export const get_productsbycategory = custumer_api + "get-products-by-category";
 export const search_product_by_name = custumer_api + "search-product-by-name";
 export const get_users_details = custumer_api + "get-users-details";
 export const register_new_user = custumer_api + "register-new-user";
+export const get_product_details = custumer_api + "get-product-details";
+export const get_recipe_detail = custumer_api + "get-recipe-detail";
+export const get_recipe_list = custumer_api + "get-recipe-list";
+export const get_all_product_category =
+	custumer_api + "get-all-product-category";

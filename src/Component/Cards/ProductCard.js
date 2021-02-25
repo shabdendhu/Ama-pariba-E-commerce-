@@ -12,11 +12,15 @@ import {
 	Checkbox,
 	Card,
 } from "@material-ui/core";
+import Productdetails from "../templet/Productdetails";
+import { useHistory } from "react-router-dom";
 
 const ProductCard = ({ data }) => {
+	const history = useHistory();
 	const [openAmountPicker, setOpenAmountPicker] = useState(false);
 	const [{ basket }, dispacher] = useStateValue();
 	const [productQntOption, setProductQntOption] = useState([]);
+	const [productPrice, setProductPrice] = useState(`${data.product_price}`);
 	const [productAmount, setProductAmount] = useState(
 		`${data.default_amt}${data.unit_quantity}`
 	);
@@ -51,7 +55,8 @@ const ProductCard = ({ data }) => {
 		});
 	};
 	const productQntSelected = (item) => {
-		setProductAmount(item);
+		setProductAmount(item.quantity);
+		setProductPrice(item.price);
 		setTimeout(() => {
 			setOpenAmountPicker(false);
 		}, 100);
@@ -94,8 +99,37 @@ const ProductCard = ({ data }) => {
 									boxShadow: "0 5px 15px rgba(0,0,0,.05)",
 								}}
 							>
+								<div
+									style={{
+										background: "green",
+										color: "white",
+										padding: "3px",
+										borderRadius: "0px 0px 45px 45px",
+										fontSize: "13px",
+										height: "13px",
+										width: "100px",
+										// position: "absolute",
+										// margin: "-124px -18px 0px -5px",
+										textAlign: "center",
+										display: "flex",
+										alignItems: "center",
+										justifyContent: "center",
+										marginTop: "-5px",
+									}}
+								>
+									35% off
+								</div>
 								<img
-									style={{ width: "100px", height: "100px" }}
+									onClick={() => {
+										history.push(
+											`/product-details?id=${data.product_id}?name=${data.product_name}`
+										);
+									}}
+									style={{
+										width: "100px",
+										height: "100px",
+										// paddingTop: "13px",
+									}}
 									src={data.image_url}
 								/>
 							</div>
@@ -159,7 +193,7 @@ const ProductCard = ({ data }) => {
 									margin: "4px",
 								}}
 							>
-								<span>₹{data.product_price}</span>
+								<span>₹{productPrice}</span>
 							</div>
 						</div>
 					</div>
@@ -171,7 +205,8 @@ const ProductCard = ({ data }) => {
 							image={data.image_url}
 							name={data.product_name}
 							amount={productAmount}
-							price={data.product_price}
+							price={parseInt(productPrice)}
+							width="117px"
 							stage="add"
 						/>
 					</div>
@@ -251,7 +286,18 @@ const ProductCard = ({ data }) => {
 									marginBottom: " 10px",
 								}}
 							>
-								<span>{item.option_1}</span>
+								<span>
+									{item.quantity}
+									<span
+										style={{
+											marginLeft: "134px",
+											color: "green",
+											fontWeight: 600,
+										}}
+									>
+										₹{item.price}
+									</span>
+								</span>
 								<span
 									style={{
 										right: 0,
@@ -262,12 +308,12 @@ const ProductCard = ({ data }) => {
 									<Checkbox
 										style={{ padding: "0px" }}
 										onClick={() => {
-											productQntSelected(item.option_1);
+											productQntSelected(item);
 										}}
 									/>
 								</span>
 							</Card>
-							<Card
+							{/* <Card
 								style={{
 									// border: " 1px solid #00e7ff",
 									// background: "gainsboro",
@@ -292,7 +338,7 @@ const ProductCard = ({ data }) => {
 										}}
 									/>
 								</span>
-							</Card>
+							</Card> */}
 						</div>
 					))}
 				</DialogContent>

@@ -16,7 +16,7 @@ const CategoryforHome2 = () => {
 				flexDirection: "row",
 				overflowX: "auto",
 				width: "100%",
-				// background: "#e8e7e7ad",
+				background: "white",
 				padding: "10px 0px",
 			}}
 		>

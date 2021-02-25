@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+// import SwipeableViews from "react-swipeable-views";
+// import { autoPlay } from "react-swipeable-views-utils";
+// const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const HomeBanner = () => {
 	const [doctors, setDoctors] = useState([]);
 	const CommonDiseases = [
-		"ayurveda_banner.png",
 		"ayurveda_banner.png",
 		"ayurveda_banner.png",
 		"ayurveda_banner.png",
@@ -21,6 +23,7 @@ const HomeBanner = () => {
 					padding: "10px 0px",
 				}}
 			>
+				{/* <AutoPlaySwipeableViews> */}
 				{CommonDiseases.map((data, index) => (
 					<div
 						key={index}
@@ -29,7 +32,7 @@ const HomeBanner = () => {
 							marginRight: "5px",
 							marginLeft: "5px",
 							// padding: "10px",
-							width: "calc(100vw - 38px)",
+							width: "calc(100vw - 10px)",
 							height: "100px",
 							position: "relative",
 							background: "white",
@@ -40,13 +43,14 @@ const HomeBanner = () => {
 						<img
 							src={data}
 							style={{
-								width: "calc(100vw - 38px)",
+								width: "calc(100vw - 10px)",
 								height: "100px",
 								borderRadius: "20px",
 							}}
 						/>
 					</div>
 				))}
+				{/* </AutoPlaySwipeableViews> */}
 			</div>
 		</>
 	);

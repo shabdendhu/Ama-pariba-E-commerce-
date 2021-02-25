@@ -3,7 +3,10 @@ import { Card, Avatar, Grid } from "@material-ui/core";
 import HomeBanner from "../templet/banner";
 import { useEffect } from "react";
 import axios from "axios";
-import { get_product_category } from "../../constants/api";
+import {
+	get_all_product_category,
+	get_product_category,
+} from "../../constants/api";
 import Header from "../templet/header";
 import { useHistory } from "react-router-dom";
 
@@ -12,7 +15,9 @@ const DiseaseCard = ({ data }) => {
 	return (
 		<Card
 			onClick={() => {
-				history.push(`/shopby-category?id=${data.id}`);
+				history.push(
+					`/show-items-with-id?id=${data.id}?name=${data.category_name}`
+				);
 			}}
 			style={{
 				display: "flex",
@@ -48,13 +53,23 @@ const DiseaseCard = ({ data }) => {
 	);
 };
 
-const CategoryCard = (image) => {
+const CategoryCard = ({ all }) => {
 	const [productCategory, setProductCategory] = useState([]);
-
+	console.log(all);
 	useEffect(() => {
-		axios.get(get_product_category).then((response) => {
-			setProductCategory(response.data.data);
-		});
+		if (all) {
+			axios.get(get_all_product_category).then((response) => {
+				setProductCategory(response.data.data);
+			});
+		} else {
+			axios
+				.post(get_product_category, {
+					is_popular: 1,
+				})
+				.then((response) => {
+					setProductCategory(response.data.data);
+				});
+		}
 	}, []);
 
 	return (
