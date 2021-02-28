@@ -1,6 +1,11 @@
 import { IconButton } from "@material-ui/core";
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import {
+	add_product_to_basket,
+	remove_product_from_basket,
+} from "../../constants/api";
 import { useStateValue } from "../templet/StateProvider";
 
 const CustomButton = ({
@@ -19,6 +24,22 @@ const CustomButton = ({
 
 	const [itemAmt, setItemAmt] = useState(0);
 
+	// const AddtoBasketApi = () => {
+	// 	axios
+	// 		.post(add_product_to_basket, {
+	// 			user_id: "23",
+	// 			product_id: id,
+	// 		})
+	// 		.then((response) => {
+	// 			console.log(response.data.data.insertId);
+	// 		});
+	// };
+	// const RemoveProductFromBasket = () => {
+	// 	axios.post(remove_product_from_basket, {
+	// 		id: id,
+	// 	});
+	// };
+
 	const addToBasket = () => {
 		if (isLoggedIn) {
 			setItemAmt(itemAmt + 1);
@@ -32,6 +53,7 @@ const CustomButton = ({
 					price: price,
 				},
 			});
+			// AddtoBasketApi();
 		} else {
 			window.location.href = "/login";
 		}
@@ -42,6 +64,7 @@ const CustomButton = ({
 			type: "REMOVE_FROM_BASKET",
 			id: id,
 		});
+		// RemoveProductFromBasket();
 	};
 	useEffect(() => {
 		if (stage === "remove") {

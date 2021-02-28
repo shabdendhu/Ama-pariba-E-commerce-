@@ -1,9 +1,10 @@
-import { Card, Grid } from "@material-ui/core";
+import { Card, Grid, CircularProgress } from "@material-ui/core";
 import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { get_recipe_list } from "../../constants/api";
+
 const CategoryItem = ({ item }) => {
 	const history = useHistory();
 
@@ -56,29 +57,64 @@ const CategoryItem = ({ item }) => {
 	);
 };
 const CategoryforHome1 = ({ all }) => {
+	const history = useHistory();
 	const [recipeList, setRecipeList] = useState([]);
+	const [showLoader, setShowLoader] = useState(true);
 	useEffect(() => {
 		if (all) {
+			setShowLoader(true);
 			axios.get(get_recipe_list).then((response) => {
-				console.log(response.data.data);
-				setRecipeList(response.data.data);
+				if (response.data.status) {
+					setShowLoader(false);
+					setRecipeList(response.data.data);
+				}
 			});
 		} else {
+			setShowLoader(true);
 			axios.get(`${get_recipe_list}/1`).then((response) => {
-				console.log(response.data.data);
-				setRecipeList(response.data.data);
+				if (response.data.status) {
+					setShowLoader(false);
+					setRecipeList(response.data.data);
+				}
 			});
 		}
 	}, []);
 	return (
-		<div style={{ background: "#efefef" }}>
-			<Grid container>
-				{recipeList.map((item, index) => (
-					<Grid item xs={4} key={index}>
-						<CategoryItem item={item} />
+		<div style={{ background: "#efefef", textAlign: "center" }}>
+			{showLoader ? (
+				<div style={{ textAlign: "center" }}>
+					<CircularProgress />
+				</div>
+			) : (
+				<>
+					<Grid container>
+						{recipeList.map((item, index) => (
+							<Grid item xs={4} key={index}>
+								<CategoryItem item={item} />
+							</Grid>
+						))}
 					</Grid>
-				))}
-			</Grid>
+					<div style={{ textAlign: "center", margin: "0px 3px 9px 0px" }}>
+						<span
+							onClick={() => {
+								history.push(`/shop-by-recipes`);
+							}}
+							style={{
+								textAlign: "center",
+								border: "1px solid black",
+								width: "fit-content",
+								padding: "3px 100px",
+								borderRadius: "6px",
+								background: "#591a07",
+								color: "white",
+								textDecoration: "none",
+							}}
+						>
+							VIEW MORE
+						</span>
+					</div>
+				</>
+			)}
 		</div>
 	);
 };

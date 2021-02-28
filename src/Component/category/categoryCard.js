@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Avatar, Grid } from "@material-ui/core";
+import { Card, Avatar, Grid, CircularProgress } from "@material-ui/core";
 import HomeBanner from "../templet/banner";
 import { useEffect } from "react";
 import axios from "axios";
@@ -55,19 +55,30 @@ const DiseaseCard = ({ data }) => {
 
 const CategoryCard = ({ all }) => {
 	const [productCategory, setProductCategory] = useState([]);
+	const [showLoader, setShowLoader] = useState(false);
+	const history = useHistory();
+
 	console.log(all);
 	useEffect(() => {
 		if (all) {
+			setShowLoader(true);
 			axios.get(get_all_product_category).then((response) => {
-				setProductCategory(response.data.data);
+				if (response.data.status) {
+					setShowLoader(false);
+					setProductCategory(response.data.data);
+				}
 			});
 		} else {
+			setShowLoader(true);
 			axios
 				.post(get_product_category, {
 					is_popular: 1,
 				})
 				.then((response) => {
-					setProductCategory(response.data.data);
+					if (response.data.status) {
+						setShowLoader(false);
+						setProductCategory(response.data.data);
+					}
 				});
 		}
 	}, []);
@@ -75,24 +86,57 @@ const CategoryCard = ({ all }) => {
 	return (
 		<>
 			<div>
-				<div
-					style={{
-						display: "flex",
-						flexDirection: "row",
-						overflowX: "auto",
-						width: "100%",
-						background: "#e8e7e7ad",
-						padding: "10px 0px",
-					}}
-				>
-					<Grid container>
-						{productCategory.map((deases, index) => (
-							<Grid item xs={6} key={index}>
-								<DiseaseCard data={deases} />
+				{showLoader ? (
+					<div style={{ textAlign: "center" }}>
+						<CircularProgress />
+					</div>
+				) : (
+					<>
+						<div
+							style={{
+								display: "flex",
+								flexDirection: "row",
+								overflowX: "auto",
+								width: "100%",
+								background: "#e8e7e7ad",
+								padding: "10px 0px",
+							}}
+						>
+							<Grid container>
+								{productCategory.map((deases, index) => (
+									<Grid item xs={6} key={index}>
+										<DiseaseCard data={deases} />
+									</Grid>
+								))}
 							</Grid>
-						))}
-					</Grid>
-				</div>
+						</div>
+						<div
+							style={{
+								textAlign: "center",
+								margin: "0px 3px 0px 0px",
+								paddingBottom: "10px",
+							}}
+						>
+							<span
+								onClick={() => {
+									history.push(`/shop-by-items`);
+								}}
+								style={{
+									textAlign: "center",
+									border: "1px solid black",
+									width: "fit-content",
+									padding: "3px 100px",
+									borderRadius: "6px",
+									background: "#591a07",
+									color: "white",
+									textDecoration: "none",
+								}}
+							>
+								VIEW MORE
+							</span>
+						</div>
+					</>
+				)}
 			</div>
 		</>
 	);

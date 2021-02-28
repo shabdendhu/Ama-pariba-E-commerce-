@@ -11,6 +11,7 @@ const ProductsByCategory = ({ id }) => {
 		axios
 			.get(`${get_productsbycategory}/${parseInt(params.get("id"))}`)
 			.then((response) => {
+				// console.log(response.data.data);
 				setProducts(response.data.data);
 			});
 	}, [id]);

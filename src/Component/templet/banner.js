@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-// import SwipeableViews from "react-swipeable-views";
-// import { autoPlay } from "react-swipeable-views-utils";
-// const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
+import SwipeableViews from "react-swipeable-views";
+import { autoPlay } from "react-swipeable-views-utils";
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const HomeBanner = () => {
 	const [doctors, setDoctors] = useState([]);
 	const CommonDiseases = [
@@ -23,34 +23,34 @@ const HomeBanner = () => {
 					padding: "10px 0px",
 				}}
 			>
-				{/* <AutoPlaySwipeableViews> */}
-				{CommonDiseases.map((data, index) => (
-					<div
-						key={index}
-						style={{
-							flexShrink: 0,
-							marginRight: "5px",
-							marginLeft: "5px",
-							// padding: "10px",
-							width: "calc(100vw - 10px)",
-							height: "100px",
-							position: "relative",
-							background: "white",
-							borderRadius: "20px",
-							border: "1px solid rgb(126 217 255)",
-						}}
-					>
-						<img
-							src={data}
+				<AutoPlaySwipeableViews>
+					{CommonDiseases.map((data, index) => (
+						<div
+							key={index}
 							style={{
+								flexShrink: 0,
+								marginRight: "5px",
+								marginLeft: "5px",
+								// padding: "10px",
 								width: "calc(100vw - 10px)",
 								height: "100px",
+								position: "relative",
+								background: "white",
 								borderRadius: "20px",
+								border: "1px solid rgb(126 217 255)",
 							}}
-						/>
-					</div>
-				))}
-				{/* </AutoPlaySwipeableViews> */}
+						>
+							<img
+								src={data}
+								style={{
+									width: "calc(100vw - 10px)",
+									height: "100px",
+									borderRadius: "20px",
+								}}
+							/>
+						</div>
+					))}
+				</AutoPlaySwipeableViews>
 			</div>
 		</>
 	);

@@ -9,6 +9,7 @@ const Products = () => {
 	useEffect(() => {
 		axios.get(get_product_list).then((response) => {
 			setProducts(response.data.data);
+			console.log(response.data.data);
 		});
 	}, []);
 	return (

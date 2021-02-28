@@ -20,31 +20,12 @@ const ProductCard = ({ data }) => {
 	const [openAmountPicker, setOpenAmountPicker] = useState(false);
 	const [{ basket }, dispacher] = useStateValue();
 	const [productQntOption, setProductQntOption] = useState([]);
+	const [discountedPrice, setDiscountedPrice] = useState(data.discounted_price);
 	const [productPrice, setProductPrice] = useState(`${data.product_price}`);
 	const [productAmount, setProductAmount] = useState(
 		`${data.default_amt}${data.unit_quantity}`
 	);
-	// const [itemAmt, setItemAmt] = useState(0);
-	// const addToBasket = () => {
-	//   setItemAmt(itemAmt + 1);
-	//   dispacher({
-	//     type: "ADD_TO_BASKET",
-	//     item: {
-	//       id: id,
-	//       image: image,
-	//       name: name,
-	//       amount: amount,
-	//       price: price
-	//     }
-	//   });
-	// };
-	// const removeFromBasket = () => {
-	//   setItemAmt(itemAmt - 1);
-	//   dispacher({
-	//     type: "REMOVE_FROM_BASKET",
-	//     id: id
-	//   });
-	// };
+
 	const productAmtApi = (id) => {
 		axios.get(`${get_product_qnt_options}/${id}`).then((response) => {
 			let qntydata = response.data;
@@ -57,6 +38,7 @@ const ProductCard = ({ data }) => {
 	const productQntSelected = (item) => {
 		setProductAmount(item.quantity);
 		setProductPrice(item.price);
+		setDiscountedPrice(item.discounted_price);
 		setTimeout(() => {
 			setOpenAmountPicker(false);
 		}, 100);
@@ -117,7 +99,7 @@ const ProductCard = ({ data }) => {
 										marginTop: "-5px",
 									}}
 								>
-									35% off
+									{data.discount}%
 								</div>
 								<img
 									onClick={() => {
@@ -144,18 +126,21 @@ const ProductCard = ({ data }) => {
 						>
 							<div
 								style={{
-									flex: 1,
+									// flex: 1,
 									paddingLeft: "7px",
 									fontSize: "18px",
 									fontFamily: "ProximaNova-Regular",
+									margin: "9px 0px",
 								}}
 							>
 								{data.product_name}
 							</div>
 							<div
-								style={{
-									flex: 1,
-								}}
+								style={
+									{
+										// flex: 1,
+									}
+								}
 							>
 								<div
 									onClick={() => {
@@ -173,7 +158,15 @@ const ProductCard = ({ data }) => {
 										justifyContent: "center",
 									}}
 								>
-									<span style={{ flex: 1 }}>{productAmount}</span>
+									<span
+										style={
+											{
+												// flex: 1
+											}
+										}
+									>
+										{productAmount}
+									</span>
 									<span
 										style={{
 											flex: 1,
@@ -191,9 +184,11 @@ const ProductCard = ({ data }) => {
 									width: "fit-content",
 									height: " fit-content",
 									margin: "4px",
+									marginTop: "8px",
 								}}
 							>
-								<span>₹{productPrice}</span>
+								<del>₹{productPrice}</del>
+								<span style={{ marginLeft: "15px" }}>₹{discountedPrice}</span>
 							</div>
 						</div>
 					</div>
@@ -288,14 +283,23 @@ const ProductCard = ({ data }) => {
 							>
 								<span>
 									{item.quantity}
+									<del
+										style={{
+											marginLeft: "90px",
+											color: "green",
+											fontWeight: 500,
+										}}
+									>
+										₹{item.price}
+									</del>
 									<span
 										style={{
-											marginLeft: "134px",
+											marginLeft: "14px",
 											color: "green",
 											fontWeight: 600,
 										}}
 									>
-										₹{item.price}
+										₹{item.discounted_price}
 									</span>
 								</span>
 								<span

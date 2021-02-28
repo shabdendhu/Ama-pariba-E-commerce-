@@ -42,35 +42,8 @@ const MainCategory = () => {
 				<HomeBanner />
 				<h3 style={style.header}>SHOP BY ITEM CATEGORY </h3>
 				<CategoryCard />
-				{/* <Link to="/shop-by-items" style={{ textDecoration: "none" }}> */}
-				<div style={{ textAlign: "center", margin: "0px 3px 9px 0px" }}>
-					<span
-						onClick={() => {
-							history.push(`/shop-by-items`);
-						}}
-						style={style.viewmore}
-					>
-						VIEW MORE
-					</span>
-				</div>
 				<h3 style={style.header}>SHOP BY RECIPES INGRIDIENT'S</h3>
 				<CategoryforHome1 />
-				<div
-					style={{
-						textAlign: "center",
-						margin: "0px 3px 0px 0px",
-						paddingBottom: "10px",
-					}}
-				>
-					<span
-						onClick={() => {
-							history.push(`/shop-by-recipes`);
-						}}
-						style={style.viewmore}
-					>
-						VIEW MORE
-					</span>
-				</div>
 				<h3 style={style.header}>SHOP BY SEASON'S BEST</h3>
 				<Shopbyseasonsbest />
 				<div
