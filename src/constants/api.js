@@ -1,17 +1,17 @@
 const api = () => {
-	let site_url = "http://localhost:9000/";
-	let custumer_api = "http://localhost:9000/customer-app/";
-	if (window.location.hostname === "localhost") {
-		site_url = "http://localhost:9000/";
-		custumer_api = "http://localhost:9000/customer-app/";
-	} else {
-		site_url = "http://192.168.43.53:9000/";
-		custumer_api = "http://192.168.43.53:9000/customer-app/";
-	}
-	return {
-		site_url,
-		custumer_api,
-	};
+  let site_url = "http://localhost:9000/";
+  let custumer_api = "http://localhost:9000/customer-app/";
+  if (window.location.hostname === "localhost") {
+    site_url = "http://localhost:9000/";
+    custumer_api = "http://localhost:9000/customer-app/";
+  } else {
+    site_url = "http://192.168.43.77:9000/";
+    custumer_api = "http://192.168.43.77:9000/customer-app/";
+  }
+  return {
+    site_url,
+    custumer_api,
+  };
 };
 
 export const { site_url, custumer_api } = api();
@@ -27,9 +27,10 @@ export const get_product_details = custumer_api + "get-product-details";
 export const get_recipe_detail = custumer_api + "get-recipe-detail";
 export const get_recipe_list = custumer_api + "get-recipe-list";
 export const get_all_product_category =
-	custumer_api + "get-all-product-category";
+  custumer_api + "get-all-product-category";
 // basket manegement api
 export const add_product_to_basket = custumer_api + "add-product-to_basket";
 export const remove_product_from_basket =
-	custumer_api + "remove-product-from-basket";
+  custumer_api + "remove-product-from-basket";
 export const get_basket_items = custumer_api + "get-basket-items";
+export const get_search_suggestion = custumer_api + "get-search-suggestion";

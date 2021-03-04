@@ -14,201 +14,201 @@ import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 const EmptyBasketNotication = () => {
-	const history = useHistory();
-	return (
-		<div
-			style={{
-				background: "#efefef",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				marginTop: "170px",
-				flexDirection: "column",
-			}}
-		>
-			<img
-				src="emptybasket.png"
-				style={{ width: "200px", borderRadius: "30px" }}
-			/>
-			<div> YOUR BASKET IS EMPTY</div>
-			{/* <div> */}
-			<button
-				onClick={() => {
-					history.push("/");
-				}}
-				style={{
-					backgroundColor: "#9e2121",
-					margin: "30px",
-					height: "35px",
-					width: "50%",
-					color: "white",
-					border: "none",
-					outline: "none",
-					borderRadius: "5px",
-					fontSize: "17px",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "space-around",
-				}}
-			>
-				START SHOPPING
-			</button>
-			{/* </div> */}
-		</div>
-	);
+  const history = useHistory();
+  return (
+    <div
+      style={{
+        background: "#efefef",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "170px",
+        flexDirection: "column",
+      }}
+    >
+      <img
+        src="emptybasket.png"
+        style={{ width: "200px", borderRadius: "30px" }}
+      />
+      <div> YOUR BASKET IS EMPTY</div>
+      {/* <div> */}
+      <button
+        onClick={() => {
+          history.push("/");
+        }}
+        style={{
+          backgroundColor: "#9e2121",
+          margin: "30px",
+          height: "35px",
+          width: "50%",
+          color: "white",
+          border: "none",
+          outline: "none",
+          borderRadius: "5px",
+          fontSize: "17px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
+        START SHOPPING
+      </button>
+      {/* </div> */}
+    </div>
+  );
 };
 
 const Checkout = () => {
-	const [{ basket }] = useStateValue();
-	// const [{ user }] = useStateValue();
-	const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
-	const [apipauser, setApipauser] = useState(true);
-	console.log("basket", basket);
-	var unique = [];
-	var distinct = [];
-	for (let i = 0; i < basket.length; i++) {
-		if (!unique[basket[i].id]) {
-			distinct.push(basket[i]);
-			unique[basket[i].id] = 1;
-		}
-	}
+  const [{ basket }] = useStateValue();
+  // const [{ user }] = useStateValue();
+  const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
+  const [apipauser, setApipauser] = useState(true);
+  console.log("basket", basket);
+  var unique = [];
+  var distinct = [];
+  for (let i = 0; i < basket.length; i++) {
+    if (!unique[basket[i].id]) {
+      distinct.push(basket[i]);
+      unique[basket[i].id] = 1;
+    }
+  }
 
-	console.log("uniq", unique);
-	console.log("distinct", distinct);
-	const makeOrder = () => {
-		basket.forEach((item, index) => {
-			if (apipauser === true) {
-				setApipauser(false);
-				axios
-					.post(make_new_order, {
-						order_date: new Date(),
-						status: "conformed",
-						user_id: "1",
-						product_id: item.id,
-						product_amt: item.amount,
-					})
-					.then((response) => {
-						if (response.data.status === true) {
-							setApipauser(true);
-						}
-						console.log(response.data.message);
-					});
-			}
-		});
-	};
-	return (
-		<>
-			<Header pagetitle="My Basket" />
-			<div className="checkout">
-				<div className="checkout__left">
-					<div>
-						{basket.length === 0 ? (
-							<div>
-								<EmptyBasketNotication />
-							</div>
-						) : (
-							<div style={{ background: "#efefef", marginTop: "50px" }}>
-								{basket.length > 0 && (
-									<div
-									// style={{ position: "fixed" }}
-									>
-										<div
-											style={{
-												display: "flex",
-												flexDirection: "row",
-												height: "40px",
-												padding: "10px",
-												paddingBottom: "10px",
-												backgroundColor: "gray",
-												position: "fixed",
-												bottom: 0,
-												color: "white",
-												width: " -webkit-fill-available",
-											}}
-										>
-											<CurrencyFormat
-												renderText={(value) => (
-													<div>
-														<span style={{ paddingBottom: "10px" }}>
-															<b>Subtotal: </b>
-															<span style={{ paddingLeft: "5px" }}>
-																Rs: {value}
-															</span>
-															<br />
-															<span>
-																{basket.length}{" "}
-																{basket.length === 1 ? "Item" : "Items"} in your
-																basket
-															</span>
-														</span>
-														<span
-															style={{
-																right: 0,
-																position: "absolute",
-																margin: "-17px 6px 1px",
-															}}
-														>
-															<button
-																onClick={() => {
-																	makeOrder();
-																}}
-																style={{
-																	outline: "none",
-																	border: "none",
-																	background: "#9e2821",
-																	color: "white",
-																	height: "30px",
-																	width: "113px",
-																	borderRadius: "18px",
-																	border: "1px solid white",
-																}}
-															>
-																CHECKOUT
-															</button>
-														</span>
-													</div>
-												)}
-												desimalScale={2}
-												value={getBasketTotal(basket)}
-												displayType={"text"}
-												thousendSeparetor={true}
-												prifix={"Rs"}
-											/>
-										</div>
-									</div>
-								)}
-								<div
-									style={{
-										background: "white",
-										borderBottom: "1px solid gray",
-										borderTop: "1px solid gray",
-										// paddingBottom: "5px",
-										padding: "5px",
-										textAlign: "center",
-									}}
-								>
-									YOUR BASKET
-								</div>
-								<div style={{ marginBottom: "55px" }}>
-									{distinct.map((item, index) => (
-										<CheckoutProduct
-											key={item.id}
-											// count={count}
-											item={item}
-											id={item.id}
-											image={item.image}
-											price={item.price}
-											amount={item.amount}
-										/>
-									))}
-								</div>
-							</div>
-						)}
-					</div>
-				</div>
-			</div>
-		</>
-	);
+  console.log("uniq", unique);
+  console.log("distinct", distinct);
+  const makeOrder = () => {
+    basket.forEach((item, index) => {
+      if (apipauser === true) {
+        setApipauser(false);
+        axios
+          .post(make_new_order, {
+            order_date: new Date(),
+            status: "conformed",
+            user_id: "1",
+            product_id: item.id,
+            product_amt: item.amount,
+          })
+          .then((response) => {
+            if (response.data.status === true) {
+              setApipauser(true);
+            }
+            console.log(response.data.message);
+          });
+      }
+    });
+  };
+  return (
+    <>
+      <Header pagetitle="My Basket" />
+      <div className="checkout">
+        <div className="checkout__left">
+          <div>
+            {basket.length === 0 ? (
+              <div>
+                <EmptyBasketNotication />
+              </div>
+            ) : (
+              <div style={{ background: "#efefef", marginTop: "50px" }}>
+                {basket.length > 0 && (
+                  <div
+                  // style={{ position: "fixed" }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        height: "40px",
+                        padding: "10px",
+                        paddingBottom: "10px",
+                        backgroundColor: "gray",
+                        position: "fixed",
+                        bottom: 0,
+                        color: "white",
+                        width: " -webkit-fill-available",
+                      }}
+                    >
+                      <CurrencyFormat
+                        renderText={(value) => (
+                          <div>
+                            <span style={{ paddingBottom: "10px" }}>
+                              <b>Subtotal: </b>
+                              <span style={{ paddingLeft: "5px" }}>
+                                Rs: {value}
+                              </span>
+                              <br />
+                              <span>
+                                {basket.length}{" "}
+                                {basket.length === 1 ? "Item" : "Items"} in your
+                                basket
+                              </span>
+                            </span>
+                            <span
+                              style={{
+                                right: 0,
+                                position: "absolute",
+                                margin: "-17px 6px 1px",
+                              }}
+                            >
+                              <button
+                                onClick={() => {
+                                  makeOrder();
+                                }}
+                                style={{
+                                  outline: "none",
+                                  border: "none",
+                                  background: "#9e2821",
+                                  color: "white",
+                                  height: "30px",
+                                  width: "113px",
+                                  borderRadius: "18px",
+                                  border: "1px solid white",
+                                }}
+                              >
+                                CHECKOUT
+                              </button>
+                            </span>
+                          </div>
+                        )}
+                        desimalScale={2}
+                        value={getBasketTotal(basket)}
+                        displayType={"text"}
+                        thousendSeparetor={true}
+                        prifix={"Rs"}
+                      />
+                    </div>
+                  </div>
+                )}
+                <div
+                  style={{
+                    background: "white",
+                    borderBottom: "1px solid gray",
+                    borderTop: "1px solid gray",
+                    // paddingBottom: "5px",
+                    padding: "5px",
+                    textAlign: "center",
+                  }}
+                >
+                  YOUR BASKET
+                </div>
+                <div style={{ marginBottom: "55px" }}>
+                  {distinct.map((item, index) => (
+                    <CheckoutProduct
+                      key={item.id}
+                      // count={count}
+                      item={item}
+                      id={item.id}
+                      image={item.image}
+                      price={item.price}
+                      amount={item.amount}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Checkout;
