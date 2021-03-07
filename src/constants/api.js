@@ -1,12 +1,12 @@
 const api = () => {
-  let site_url = "http://localhost:9000/";
-  let custumer_api = "http://localhost:9000/customer-app/";
+  let site_url = "http://tynored.ddns.net:9000/";
+  let custumer_api = "http://tynored.ddns.net:9000/customer-app/";
   if (window.location.hostname === "localhost") {
-    site_url = "http://localhost:9000/";
-    custumer_api = "http://localhost:9000/customer-app/";
+    site_url = "http://tynored.ddns.net:9000/";
+    custumer_api = "http://tynored.ddns.net:9000/customer-app/";
   } else {
-    site_url = "http://192.168.43.77:9000/";
-    custumer_api = "http://192.168.43.77:9000/customer-app/";
+    site_url = "http://tynored.ddns.net:9000/";
+    custumer_api = "http://tynored.ddns.net:9000/customer-app/";
   }
   return {
     site_url,
