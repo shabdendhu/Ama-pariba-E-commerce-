@@ -2,11 +2,13 @@ const api = () => {
   let site_url = "http://tynored.ddns.net:9000/";
   let custumer_api = "http://tynored.ddns.net:9000/customer-app/";
   if (window.location.hostname === "localhost") {
-    site_url = "http://tynored.ddns.net:9000/";
-    custumer_api = "http://tynored.ddns.net:9000/customer-app/";
+    site_url = "https://node-deploy-production.herokuapp.com/";
+    custumer_api = "https://node-deploy-production.herokuapp.com/customer-app/";
   } else {
-    site_url = "http://tynored.ddns.net:9000/";
-    custumer_api = "http://tynored.ddns.net:9000/customer-app/";
+    // site_url = "http://tynored.ddns.net:9000/";
+    // custumer_api = "http://tynored.ddns.net:9000/customer-app/";
+    site_url = "https://node-deploy-production.herokuapp.com/";
+    custumer_api = "https://node-deploy-production.herokuapp.com/customer-app/";
   }
   return {
     site_url,
