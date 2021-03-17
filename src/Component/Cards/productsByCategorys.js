@@ -19,7 +19,7 @@ const ProductsByCategory = () => {
           setShowLoader(false);
           setProducts(response.data.data);
         }
-        // console.log(response.data.data);
+        // console.table(response.data.data);
       });
   }, []);
   // useEffect(() => {

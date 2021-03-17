@@ -13,14 +13,20 @@ import { useEffect } from "react";
 import { userLogout } from "../../actions/authorization";
 import { useDispatch } from "react-redux";
 import { user_info } from "../../constants/storage-keys";
+// import { initialState } from "../../reducer";
 
 const Header = ({ pagetitle }) => {
-  const [{ basket }] = useStateValue();
-  const logedin = false;
+  // const [{ basket }] = useStateValue();
+  // const logedin = false;
+  const [{ basket }, dispacher] = useStateValue();
+
   const dispatch = useDispatch();
 
   const [openSearchDilog, setOpenSearchDilog] = useState(false);
   const [openSideNav, setOpenSideNav] = useState(false);
+  // const InitiastateData = () => {};
+  // InitiastateData();
+  // console.log(InitiastateData());
   const logout = () => {
     dispatch(userLogout());
     localStorage.removeItem(user_info);
@@ -34,6 +40,7 @@ const Header = ({ pagetitle }) => {
       document.body.style.overflow = "unset";
     }
   }, [openSideNav]);
+
   return (
     <React.Fragment>
       <div style={{}}>
@@ -44,9 +51,7 @@ const Header = ({ pagetitle }) => {
             color: "white",
             width: "100%",
             position: "fixed",
-            // marginTop: "-68px",
             zIndex: 99,
-            width: "-webkit-fill-available",
             top: 0,
             borderRadius: 0,
           }}
@@ -87,7 +92,6 @@ const Header = ({ pagetitle }) => {
                   textDecoration: "none",
                   fontSize: "20px",
                   color: "white",
-                  textDecoration: "none",
                 }}
                 to="/"
               >

@@ -5,17 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import Header from "../templet/header";
 import Axios from "axios";
-import { Snackbar, IconButton, Icon } from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
 import { loggedin_as, user_info } from "../../constants/storage-keys";
-import { useStateValue } from "../templet/StateProvider";
 import { loggedinAction } from "../../actions/authorization";
 import { get_users_details, register_new_user } from "../../constants/api";
 
 const Login = () => {
   const [error, setError] = useState({ hasError: false, message: "" });
-  const [{ user }, dispacher] = useStateValue();
-  const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
-  const [logedinUsersWelcome, setLogedinUsersWelcome] = useState(isLoggedIn);
+  // const user_info = useSelector((state) => state.authorization.user_info);
+  // const userInfo = useSelector(
+  //   (state) => state.authenticationReducer.user_info
+  // );
+  // console.log("isLoggedIn", user_info[0].id);
   const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({
     mobile_no: "",
@@ -32,7 +33,6 @@ const Login = () => {
       })
     );
     window.history.go("-1");
-    setLogedinUsersWelcome(true);
     console.log("data1", response.data.data);
   };
   // const SignIn = () => {

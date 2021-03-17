@@ -1,8 +1,5 @@
 import React from "react";
-import { useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
 import CategoryCard from "../../Component/category/categoryCard";
-import CategoryforHome1 from "../../Component/category/Recipes";
 import Shopbyseasonsbest from "../../Component/category/Shopbyseasonsbest";
 import TopDeals from "../../Component/category/Topdeals";
 import HomeBanner from "../../Component/templet/banner";
@@ -31,11 +28,6 @@ const style = {
   },
 };
 const MainCategory = () => {
-  const history = useHistory();
-
-  // useEffect(() => {
-  // 	document.body.style.background = "#efefef";
-  // }, []);
   return (
     <div>
       <Header />

@@ -2,16 +2,14 @@ import React from "react";
 import "./Checkout.css";
 import CheckoutProduct from "./CheckoutProduct";
 import CurrencyFormat from "react-currency-format";
-import Subtotal from "../../Component/templet/Subtotal";
-// import { useStateValue } from "./StateProvider";
 import Header from "../../Component/templet/header";
 import { useStateValue } from "../../Component/templet/StateProvider";
 import { getBasketTotal } from "../../reducer";
-import { make_new_order } from "../../constants/api";
+import { get_basket_items, make_new_order } from "../../constants/api";
 import axios from "axios";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
 
 const EmptyBasketNotication = () => {
   const history = useHistory();
@@ -28,6 +26,7 @@ const EmptyBasketNotication = () => {
     >
       <img
         src="emptybasket.png"
+        alt="emptybasket_icon"
         style={{ width: "200px", borderRadius: "30px" }}
       />
       <div> YOUR BASKET IS EMPTY</div>
@@ -61,20 +60,23 @@ const EmptyBasketNotication = () => {
 const Checkout = () => {
   const [{ basket }] = useStateValue();
   // const [{ user }] = useStateValue();
-  const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
+  // const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
   const [apipauser, setApipauser] = useState(true);
-  console.log("basket", basket);
-  var unique = [];
-  var distinct = [];
-  for (let i = 0; i < basket.length; i++) {
-    if (!unique[basket[i].id]) {
-      distinct.push(basket[i]);
-      unique[basket[i].id] = 1;
-    }
-  }
+  // console.log("basket", basket);
+  // var unique = [];
+  // var distinct = [];
+  // for (let i = 0; i < basket.length; i++) {
+  //   if (!unique[basket[i].id]) {
+  //     distinct.push(basket[i]);
+  //     unique[basket[i].id] = 1;
+  //   }
+  // }
 
-  console.log("uniq", unique);
-  console.log("distinct", distinct);
+  console.log(basket);
+  const shorteddistinct = basket.sort((a, b) => {
+    return a.id - b.id;
+  });
+  console.log("distinct", shorteddistinct);
   const makeOrder = () => {
     basket.forEach((item, index) => {
       if (apipauser === true) {
@@ -96,6 +98,15 @@ const Checkout = () => {
       }
     });
   };
+  // useEffect(() => {
+  //   axios
+  //     .post(get_basket_items, {
+  //       user_id: 1,
+  //     })
+  //     .then((response) => {
+  //       console.log("response.data.data.insertId", response.data.data);
+  //     });
+  // }, []);
   return (
     <>
       <Header pagetitle="My Basket" />
@@ -160,7 +171,6 @@ const Checkout = () => {
                                   height: "30px",
                                   width: "113px",
                                   borderRadius: "18px",
-                                  border: "1px solid white",
                                 }}
                               >
                                 CHECKOUT
@@ -190,9 +200,10 @@ const Checkout = () => {
                   YOUR BASKET
                 </div>
                 <div style={{ marginBottom: "55px" }}>
-                  {distinct.map((item, index) => (
+                  {shorteddistinct.map((item, index) => (
                     <CheckoutProduct
-                      key={item.id}
+                      key={item.item_id}
+                      // key={index}
                       // count={count}
                       item={item}
                       id={item.id}

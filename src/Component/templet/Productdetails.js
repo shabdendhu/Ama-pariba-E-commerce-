@@ -8,24 +8,7 @@ import axios from "axios";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-const fd = [
-  {
-    id: 1,
-    packid: 2,
-  },
-  {
-    id: 3,
-    packid: 4,
-  },
-  {
-    id: 5,
-    packid: 6,
-  },
-  {
-    id: 7,
-    packid: 8,
-  },
-];
+
 const Productdetails = ({ openDetailDilog }) => {
   var url = window.location.search;
   var pagetitle = url.substring(url.lastIndexOf("=") + 1);
@@ -39,6 +22,16 @@ const Productdetails = ({ openDetailDilog }) => {
     image: "",
     name: "",
   });
+  const basketoperation = ({ product }) => {
+    setProductForBasket({
+      ...productForBasket,
+      productId: product.product_id,
+      image: product.image_url,
+      name: product.product_name,
+      // amount: product.,
+      // price: product,
+    });
+  };
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     axios
@@ -51,16 +44,10 @@ const Productdetails = ({ openDetailDilog }) => {
           setPackSize(response.data.data.pack_size);
           setproductPrice(product.product_price);
           setProductAmount(`${product.default_amt}${product.unit_quantity}`);
-          setProductForBasket({
-            ...productForBasket,
-            productId: product.product_id,
-            image: product.image_url,
-            name: product.product_name,
-            // amount: product.,
-            // price: product,
-          });
+          basketoperation({ product });
         }
       });
+    // eslint-disable-next-line
   }, []);
 
   return (
@@ -91,7 +78,11 @@ const Productdetails = ({ openDetailDilog }) => {
         >
           ₹{productPrice} / {productAmount}
         </div>
-        <img src={productsDetails.image_url} style={{ width: "100vw" }} />
+        <img
+          src={productsDetails.image_url}
+          alt={productsDetails.product_name}
+          style={{ width: "100vw" }}
+        />
         <div>
           <div style={{ paddingLeft: "5px" }}>Pake Size</div>
           {packsize.map((item, index) => (

@@ -3,7 +3,6 @@ import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 const HomeBanner = () => {
-  const [doctors, setDoctors] = useState([]);
   const CommonDiseases = [
     "amaparibaBanner.jpg",
     "amaparibaBanner2.jpg",
@@ -22,7 +21,7 @@ const HomeBanner = () => {
   }, []);
 
   let isMobile = width <= 650 ? true : false;
-  console.log(isMobile);
+  // console.log(isMobile);
   return (
     <>
       {isMobile && (
@@ -56,6 +55,7 @@ const HomeBanner = () => {
               >
                 <img
                   src={data}
+                  alt="banner"
                   style={{
                     width: "calc(100vw - 10px)",
                     height: "100px",

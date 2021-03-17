@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, Slide, IconButton, Icon } from "@material-ui/core";
+import { Dialog, Slide } from "@material-ui/core";
 import Search from "@material-ui/icons/Search";
 
 import axios from "axios";
-import {
-  get_search_suggestion,
-  search_product_by_name,
-} from "../../constants/api";
+import { get_search_suggestion } from "../../constants/api";
 import Close from "@material-ui/icons/Close";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -33,7 +30,7 @@ const SearchResultCard = ({ item }) => {
       </span>
       <button
         onClick={() => {
-          const searchName = item.product_name.replace(/ +/g, "");
+          // const searchName = item.product_name.replace(/ +/g, "");
           window.location.href = `/search-results?id=${item.product_category_id}?name=${item.product_name}`;
           // console.log(market);
         }}
@@ -77,7 +74,7 @@ const Productfinder = ({ openSearchDilog, onSelectItems }) => {
   }, [searchText]);
   useEffect(() => {
     setOpen(!open);
-    console.log(open);
+    // eslint-disable-next-line
   }, [openSearchDilog]);
   return (
     <React.Fragment>
@@ -103,7 +100,6 @@ const Productfinder = ({ openSearchDilog, onSelectItems }) => {
               style={{
                 display: "flex",
                 borderRadius: "32px",
-                display: "flex",
                 flexDirection: "column",
                 width: "-webkit-fill-available",
                 padding: "10px",

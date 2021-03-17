@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { Card, Avatar, Grid, CircularProgress } from "@material-ui/core";
-import HomeBanner from "../templet/banner";
+import { Card, Grid, CircularProgress } from "@material-ui/core";
 import { useEffect } from "react";
 import axios from "axios";
 import {
   get_all_product_category,
   get_product_category,
 } from "../../constants/api";
-import Header from "../templet/header";
 import { useHistory } from "react-router-dom";
 
 const DiseaseCard = ({ data }) => {
@@ -36,7 +34,7 @@ const DiseaseCard = ({ data }) => {
             borderRadius: "30px",
           }}
           src={data.category_img}
-          alt="image"
+          alt={data.category_name}
         />
       </span>
       <span
@@ -58,7 +56,7 @@ const CategoryCard = ({ all }) => {
   const [showLoader, setShowLoader] = useState(false);
   const history = useHistory();
 
-  console.log(all);
+  // console.log(all);
   useEffect(() => {
     if (all) {
       setShowLoader(true);
@@ -81,7 +79,7 @@ const CategoryCard = ({ all }) => {
           }
         });
     }
-  }, []);
+  }, [all]);
 
   return (
     <>

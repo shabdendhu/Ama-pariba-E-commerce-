@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { useStateValue } from "../templet/StateProvider";
 import CustomButton from "../templet/AddButton";
-import { get_product_list, get_product_qnt_options } from "../../constants/api";
+import { get_product_qnt_options } from "../../constants/api";
 import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
 import {
@@ -12,44 +12,89 @@ import {
   Checkbox,
   Card,
 } from "@material-ui/core";
-import Productdetails from "../templet/Productdetails";
 import { useHistory } from "react-router-dom";
 
 const ProductCard = ({ data }) => {
+  // console.log(data);
   const history = useHistory();
   const [openAmountPicker, setOpenAmountPicker] = useState(false);
-  const [{ basket }, dispacher] = useStateValue();
+  const [{ basket }] = useStateValue();
   const [productQntOption, setProductQntOption] = useState([]);
+  const [Discount, setDiscount] = useState(data.discount);
   const [discountedPrice, setDiscountedPrice] = useState(data.discounted_price);
   const [productPrice, setProductPrice] = useState(`${data.product_price}`);
   const [productAmount, setProductAmount] = useState(
     `${data.default_amt}${data.unit_quantity}`
   );
 
-  //
-  // const [{ basket }, dispatch] = useStateValue();
-  // console.log("item", id, image, name, amount);
-
   const productId = [];
+  const productAmt = [];
   basket.forEach((item) => {
     productId.push(item.id);
+    productAmt.push(item.amount);
   });
+  // console.log("productAmt", productAmt);
+
   var count = {};
   productId.forEach(function (i) {
     count[i] = (count[i] || 0) + 1;
   });
-  //
+  //logic to get the item_id from basket if the product_id existt
+  const Item_id = [];
+  const Id = [];
+  const vdjhg = {};
+  basket.forEach((item) => {
+    Item_id.push(item.item_id);
+    // console.log(item);
 
-  const productAmtApi = (id) => {
-    axios.get(`${get_product_qnt_options}/${id}`).then((response) => {
-      let qntydata = response.data;
-      if (qntydata.status === true && qntydata.data.length > 0) {
-        setProductQntOption(response.data.data);
-        setOpenAmountPicker(true);
-      }
-    });
+    Id.push(item.id);
+  });
+  // console.log(Id, Item_id);
+
+  // for (let i = 0; i < Id.length; i++) {
+  // vdjhg[Id[i]] = Item_id[i];
+  Item_id.forEach((item_id, i) => (vdjhg[item_id] = Id[i]));
+  // }
+  const result = Object.keys(vdjhg).find(
+    (key) => vdjhg[key] === data.product_id
+  );
+  console.log(result);
+  // console.log("vdjhg[data.product_id]", `${data.product_id}=${result}`);
+  var currentProductObjct = basket.filter((obj) => obj.item_id == result);
+  if (currentProductObjct && currentProductObjct[0]) {
+    console.log(currentProductObjct[0].amount);
+  }
+  const productAmtApi = () => {
+    axios
+      .get(`${get_product_qnt_options}/${data.product_id}`)
+      .then((response) => {
+        let qntydata = response.data;
+        if (qntydata.status === true && qntydata.data.length > 0) {
+          setProductQntOption(response.data.data);
+          console.log(response.data.data);
+          setOpenAmountPicker(true);
+        }
+      });
   };
+  // const currentProductData = () => {
+  //   if (result) {
+  //     axios
+  //       .get(`${get_product_qnt_options}/${data.product_id}`)
+  //       .then((response) => {
+  //         let qntydata = response.data;
+  //         if (qntydata.status === true && qntydata.data.length > 0) {
+  //           var Data = response.data.data;
+  //           var ProductObjct = Data.filter(
+  //             (obj) => obj.quantity == currentProductObjct[0].amount
+  //           );
+  //           productQntSelected(ProductObjct[0]);
+  //           // console.log(ProductObjct[0]);
+  //         }
+  //       });
+  //   }
+  // };
   const productQntSelected = (item) => {
+    setDiscount(item.discount);
     setProductAmount(`${item.quantity}${item.short_unit}`);
     setProductPrice(item.price);
     setDiscountedPrice(item.discounted_price);
@@ -65,6 +110,33 @@ const ProductCard = ({ data }) => {
       document.body.style.overflow = "unset";
     }
   }, [openAmountPicker]);
+  // useEffect(() => {
+  //   currentProductData();
+  // }, [basket]);
+  useEffect(() => {
+    if (result) {
+      axios
+        .get(`${get_product_qnt_options}/${data.product_id}`)
+        .then((response) => {
+          let qntydata = response.data;
+          if (qntydata.status === true && qntydata.data.length > 0) {
+            var Data = response.data.data;
+            var ProductObjct = Data.filter(
+              (obj) => obj.quantity == parseInt(currentProductObjct[0].amount)
+            );
+            if (ProductObjct[0]) {
+              productQntSelected(ProductObjct[0]);
+            }
+
+            console.log(
+              parseInt(currentProductObjct[0].amount),
+              Data,
+              ProductObjct
+            );
+          }
+        });
+    }
+  }, [result]);
   return (
     <>
       <React.Fragment>
@@ -113,7 +185,7 @@ const ProductCard = ({ data }) => {
                     marginTop: "-5px",
                   }}
                 >
-                  {data.discount}% off
+                  {Discount}% off
                 </div>
                 <img
                   onClick={() => {
@@ -126,6 +198,7 @@ const ProductCard = ({ data }) => {
                     height: "100px",
                     // paddingTop: "13px",
                   }}
+                  alt={data.product_name}
                   src={data.image_url}
                 />
               </div>
@@ -218,6 +291,7 @@ const ProductCard = ({ data }) => {
               width="117px"
               stage="add"
               count={count[data.product_id]}
+              item_id={result}
             />
           </div>
         </div>

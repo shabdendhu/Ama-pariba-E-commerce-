@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Card,
-  Icon,
-  CircularProgress,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -16,7 +13,7 @@ import axios from "axios";
 import CustomButton from "../templet/AddButton";
 import { useStateValue } from "../templet/StateProvider";
 const TopDeal = ({ item }) => {
-  const [{ basket }, dispacher] = useStateValue();
+  const [{ basket }] = useStateValue();
   const [productQntOption, setProductQntOption] = useState([]);
   const [productPrice, setProductPrice] = useState(`${item.product_price}`);
   const [openAmountPicker, setOpenAmountPicker] = useState(false);
@@ -35,7 +32,7 @@ const TopDeal = ({ item }) => {
   });
   //
   const productQntSelected = (items) => {
-    console.log(items);
+    // console.log(items);
     setProductAmount(`${items.quantity}${items.short_unit}`);
     setProductPrice(items.price);
     setDiscountedPrice(items.discounted_price);
@@ -116,7 +113,11 @@ const TopDeal = ({ item }) => {
           >
             {item.discount}% off
           </div>
-          <img src={item.image_url} style={{ width: "100px" }} />
+          <img
+            src={item.image_url}
+            alt={item.product_name}
+            style={{ width: "100px" }}
+          />
         </div>
         <div
           style={{
@@ -306,7 +307,7 @@ const TopDeals = () => {
   useEffect(() => {
     axios.get(get_product_list).then((response) => {
       setProducts(response.data.data);
-      console.log(response.data.data);
+      // console.log(response.data.data);
     });
   }, []);
   return (
@@ -322,7 +323,7 @@ const TopDeals = () => {
         }}
       >
         {products.map((item, index) => (
-          <TopDeal item={item} />
+          <TopDeal key={index} item={item} />
         ))}
       </div>
       {/* {loading && */}

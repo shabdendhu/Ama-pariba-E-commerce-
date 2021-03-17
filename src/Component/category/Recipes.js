@@ -1,4 +1,4 @@
-import { Card, Grid, CircularProgress } from "@material-ui/core";
+import { Grid, CircularProgress } from "@material-ui/core";
 import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -46,6 +46,7 @@ const CategoryItem = ({ item }) => {
               height: "50px",
               padding: "5px",
             }}
+            alt="recipe"
             src={item.icon}
           />
         </div>
@@ -78,7 +79,7 @@ const CategoryforHome1 = ({ all }) => {
         }
       });
     }
-  }, []);
+  }, [all]);
   return (
     <div style={{ background: "#efefef", textAlign: "center" }}>
       {showLoader ? (

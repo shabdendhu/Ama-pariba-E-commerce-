@@ -21,7 +21,7 @@ const Searchresult = () => {
         setSearchProduct(response.data.data);
         console.log(response.data.data);
       });
-  }, []);
+  }, [searchText]);
   return (
     <div>
       <Header pagetitle={searchText} />

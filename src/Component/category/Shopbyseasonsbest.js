@@ -1,12 +1,6 @@
-import { Card, Grid } from "@material-ui/core";
-import axios from "axios";
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useHistory } from "react-router-dom";
-// import { get_recipe_list } from "../../constants/api";
+import { Grid } from "@material-ui/core";
+import React from "react";
 const CategoryItem = ({ item }) => {
-  const history = useHistory();
-
   return (
     <>
       <div
@@ -45,6 +39,7 @@ const CategoryItem = ({ item }) => {
               height: "50px",
               padding: "5px",
             }}
+            alt="seasonaryItems"
             src={item.img}
           />
         </div>
@@ -55,21 +50,7 @@ const CategoryItem = ({ item }) => {
     </>
   );
 };
-const Shopbyseasonsbest = ({ all }) => {
-  const [recipeList, setRecipeList] = useState([]);
-  // useEffect(() => {
-  // 	if (all) {
-  // 		axios.get(get_recipe_list).then((response) => {
-  // 			console.log(response.data.data);
-  // 			setRecipeList(response.data.data);
-  // 		});
-  // 	} else {
-  // 		axios.get(`${get_recipe_list}/1`).then((response) => {
-  // 			console.log(response.data.data);
-  // 			setRecipeList(response.data.data);
-  // 		});
-  // 	}
-  // }, []);
+const Shopbyseasonsbest = () => {
   const seasonitem = [
     { img: "apple.png", name: "Apple" },
     { img: "orange.png", name: "Orange" },

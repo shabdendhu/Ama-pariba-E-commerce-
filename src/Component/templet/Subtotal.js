@@ -6,7 +6,7 @@ import { useStateValue } from "./StateProvider";
 // import { useStateValue } from "./StateProvider";
 
 function Subtotal() {
-  const [{ basket }, dispatch] = useStateValue();
+  const [{ basket }] = useStateValue();
 
   return (
     <div
@@ -20,11 +20,11 @@ function Subtotal() {
         position: "fixed",
         bottom: "0px",
         color: "white",
-        width: " -webkit-fill-available"
+        width: " -webkit-fill-available",
       }}
     >
       <CurrencyFormat
-        renderText={value => (
+        renderText={(value) => (
           // <>
           //   <p>
           //     Subtotal ({basket.length} items):
@@ -48,7 +48,7 @@ function Subtotal() {
               style={{
                 right: 0,
                 position: "absolute",
-                margin: "-17px 6px 1px"
+                margin: "-17px 6px 1px",
               }}
             >
               {" "}
@@ -61,7 +61,6 @@ function Subtotal() {
                   height: "30px",
                   width: "113px",
                   borderRadius: "18px",
-                  border: "1px solid white"
                 }}
               >
                 CHECKOUT
