@@ -27,7 +27,7 @@ function App() {
     if (is_loggedin) {
       axios
         .post(get_basket_items, {
-          user_id: user_info[0].id,
+          user_id: user_info.id,
         })
         .then((response) => {
           const basketItems = response.data.data;

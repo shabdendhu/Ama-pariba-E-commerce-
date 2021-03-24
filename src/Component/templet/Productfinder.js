@@ -31,7 +31,7 @@ const SearchResultCard = ({ item }) => {
       <button
         onClick={() => {
           // const searchName = item.product_name.replace(/ +/g, "");
-          window.location.href = `/search-results?id=${item.product_category_id}?name=${item.product_name}`;
+          window.location.href = `/search-results?id=${item.product_id}?name=${item.product_name}`;
           // console.log(market);
         }}
         style={{

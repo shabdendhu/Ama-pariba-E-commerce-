@@ -8,7 +8,7 @@ import Axios from "axios";
 import { Snackbar } from "@material-ui/core";
 import { loggedin_as, user_info } from "../../constants/storage-keys";
 import { loggedinAction } from "../../actions/authorization";
-import { get_users_details, register_new_user } from "../../constants/api";
+import { login_with_password, register_new_user } from "../../constants/api";
 
 const Login = () => {
   const [error, setError] = useState({ hasError: false, message: "" });
@@ -46,7 +46,7 @@ const Login = () => {
   // 	console.log("setuser");
   // };
   const SignIn = () => {
-    Axios.post(get_users_details, {
+    Axios.post(login_with_password, {
       mobile_no: userDetails.mobile_no,
       password: userDetails.password,
     }).then((response) => {

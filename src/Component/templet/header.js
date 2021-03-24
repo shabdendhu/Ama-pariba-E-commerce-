@@ -1,11 +1,19 @@
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, useHistory, withRouter } from "react-router-dom";
 import MenuIcon from "@material-ui/icons/Menu";
 import ShoppingBasketIcon from "@material-ui/icons/ShoppingBasket";
 import SearchIcon from "@material-ui/icons/Search";
 import ArrowbackIcon from "@material-ui/icons/ArrowBack";
 
-import { Card, IconButton, Icon, Drawer, Divider } from "@material-ui/core";
+import {
+  Card,
+  IconButton,
+  Icon,
+  Divider,
+  SwipeableDrawer,
+  List,
+  ListItem,
+} from "@material-ui/core";
 import { useState } from "react";
 import { useStateValue } from "./StateProvider";
 import Productfinder from "./Productfinder";
@@ -14,19 +22,78 @@ import { userLogout } from "../../actions/authorization";
 import { useDispatch } from "react-redux";
 import { user_info } from "../../constants/storage-keys";
 // import { initialState } from "../../reducer";
-
+const style = {
+  topSection: {
+    background: "#185c6b", //'#14678e',
+    marginTop: "56px",
+    padding: "15px 0px",
+  },
+  header: {
+    display: "flex",
+    alignItems: "center",
+    padding: "0px 10px",
+    height: "56px",
+  },
+  label: {
+    fontWeight: 500,
+    fontSize: "20px",
+    margin: "10px 0px",
+  },
+  action: {
+    width: "100%",
+    margin: "0px 3px",
+    boxShadow:
+      "0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2)",
+    padding: "9px 10px",
+    fontWeight: 500,
+    fontSize: "15px",
+    color: "#4c4447",
+    display: "flex",
+    alignItems: "center",
+  },
+  otherAction: {
+    display: "inline-flex",
+    flexDirection: "column",
+    width: "80px",
+    textAlign: "center",
+  },
+  otherActionIcon: {
+    fontSize: "16px",
+  },
+  otherActionIconButton: {
+    height: "40px",
+    width: "40px",
+    color: "white",
+    margin: "0px auto",
+  },
+  otherActionName: {
+    fontSize: "14px",
+    fontWeight: 500,
+  },
+};
+const menuStyle = {
+  listItem: {
+    padding: "10px 15px",
+  },
+  listItemtext: {
+    // marginLeft: "15px",
+    fontWeight: 500,
+    color: "#5a5353",
+  },
+  menuicon: {
+    fontSize: 20,
+    color: "#969696",
+  },
+};
 const Header = ({ pagetitle }) => {
-  // const [{ basket }] = useStateValue();
-  // const logedin = false;
-  const [{ basket }, dispacher] = useStateValue();
+  const history = useHistory();
+  const [{ basket }] = useStateValue();
 
   const dispatch = useDispatch();
 
   const [openSearchDilog, setOpenSearchDilog] = useState(false);
   const [openSideNav, setOpenSideNav] = useState(false);
-  // const InitiastateData = () => {};
-  // InitiastateData();
-  // console.log(InitiastateData());
+
   const logout = () => {
     dispatch(userLogout());
     localStorage.removeItem(user_info);
@@ -143,51 +210,22 @@ const Header = ({ pagetitle }) => {
             </Link>
           </div>
         </Card>
-        {/* {showSearchbar === true && (
-          <Card>
-            <div style={{ display: "flex", flexDirection: "row" }}>
-              <input
-                type="text"
-                style={{
-                  flex: 5,
-                  height: "12px",
-                  padding: "10px",
-                  border: "2px solid green",
-                  width: "100%",
-                  borderRadius: "10px",
-                  margin: "6px 10px"
-                }}
-              />
-              <Button
-                style={{
-                  flex: 1,
-                  backgroundColor: "lightgreen",
-                  color: "white",
-                  height: "20px",
-                  margin: "13px 7px 0px 0px",
-                  padding: "7px",
-                  fontSize: "10px",
-                  color: "black"
-                }}
-              >
-                Search
-              </Button>
-            </div>
-          </Card>
-        )} */}
       </div>
       <div>
-        <Drawer
+        <SwipeableDrawer
+          anchor="left"
           open={openSideNav}
-          anchor={"left"}
           onClose={() => {
             setOpenSideNav(false);
           }}
-          // fullWidth={true}
+          onOpen={() => {
+            setOpenSideNav(true);
+          }}
         >
           <div
             style={{
-              width: "calc(100vw - 173px)",
+              // width: "calc(100vw - 173px)",
+              width: "100%",
               // padding: "10px",
               height: "-webkit-fill-available",
             }}
@@ -198,107 +236,144 @@ const Header = ({ pagetitle }) => {
               <div
                 style={{
                   backgroundColor: "rgb(89, 26, 7)",
-                  height: "35px",
+                  height: "78px",
                   width: "100%",
                   marginBottom: "10px",
                   display: "flex",
                   alignItems: "center",
+                  // justifyContent: "center",
 
+                  flexDirection: "column",
+                  paddingTop: "7px",
                   // borderRadius: "5px",
                 }}
               >
-                <span
+                <div
                   style={{
                     color: "white",
                     fontSize: "20px",
-                    marginLeft: "10px",
+                    // marginLeft: "20px",
                   }}
                 >
                   ଆମ ପରିବା
-                </span>
-              </div>
-
-              <div style={{ padding: "5px" }}>
-                <Link
-                  onClick={() => {
-                    setOpenSideNav(false);
-                  }}
-                  to="/"
-                  style={{
-                    color: "black",
-                    textDecoration: "none",
-                    fontSize: "20px",
-                  }}
-                >
-                  <div style={{ padding: "7px 4px", fontSize: "23px" }}>
-                    Home
-                  </div>
-                </Link>
-                <Divider />
-                <Link
-                  onClick={() => {
-                    setOpenSideNav(false);
-                  }}
-                  to="/category"
-                  style={{
-                    color: "black",
-                    textDecoration: "none",
-                    fontSize: "20px",
-                  }}
-                >
-                  <div style={{ padding: "7px 4px", fontSize: "23px" }}>
-                    Category
-                  </div>
-                </Link>
-                <Divider />{" "}
-                {/* <Link
-									onClick={() => {
-										setOpenSideNav(false);
-									}}
-									to="/about"
-									style={{
-										color: "black",
-										textDecoration: "none",
-										fontSize: "20px",
-									}}
-								>
-									<div style={{ padding: "7px 4px", fontSize: "23px" }}>
-										About
-									</div>
-								</Link>
-								<Divider />	 */}
-                <Link
-                  onClick={() => {
-                    setOpenSideNav(false);
-                  }}
-                  to="/login"
-                  style={{
-                    color: "black",
-                    textDecoration: "none",
-                    fontSize: "20px",
-                  }}
-                >
-                  <div style={{ padding: "7px 4px", fontSize: "23px" }}>
-                    Login
-                  </div>
-                </Link>
-                <Divider />
+                </div>
                 <div
-                  onClick={logout}
                   style={{
-                    color: "black",
-                    textDecoration: "none",
-                    fontSize: "20px",
+                    width: "100%",
+                    marginTop: "10px",
+                    // display: "flex",
+                    // justifyContent: "space-around",
+                    color: "white",
                   }}
                 >
-                  <div style={{ padding: "7px 4px", fontSize: "23px" }}>
-                    logout
-                  </div>
+                  <span
+                    style={{
+                      border: "1px solid white",
+                      padding: "3px 8px",
+                      margin: "10px",
+                      width: "60px",
+                    }}
+                  >
+                    Account
+                  </span>
+                  <span
+                    style={{
+                      border: "1px solid white",
+                      padding: "3px 8px",
+                      margin: "10px",
+                      width: "60px",
+                    }}
+                  >
+                    Orders
+                  </span>
                 </div>
               </div>
+
+              <List style={{ padding: "5px" }}>
+                <ListItem
+                  button
+                  onClick={() => {
+                    history.push("/");
+                    setOpenSideNav(false);
+                  }}
+                  style={menuStyle.listItem}
+                >
+                  <span style={menuStyle.listItemtext}> Home</span>
+                </ListItem>
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    history.push("/shop-by-category");
+                    setOpenSideNav(false);
+                  }}
+                  style={menuStyle.listItem}
+                >
+                  <span style={menuStyle.listItemtext}> Shop By Category</span>
+                </ListItem>
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    history.push("/");
+                    setOpenSideNav(false);
+                  }}
+                  style={menuStyle.listItem}
+                >
+                  <span style={menuStyle.listItemtext}> My History</span>
+                </ListItem>{" "}
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    history.push("/my-account");
+                    setOpenSideNav(false);
+                  }}
+                  style={menuStyle.listItem}
+                >
+                  <span style={menuStyle.listItemtext}> My Account</span>
+                </ListItem>{" "}
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    history.push("/");
+                    setOpenSideNav(false);
+                  }}
+                  style={menuStyle.listItem}
+                >
+                  <span style={menuStyle.listItemtext}> Need Help</span>
+                </ListItem>{" "}
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    history.push("/login");
+                    setOpenSideNav(false);
+                  }}
+                  style={menuStyle.listItem}
+                >
+                  <span style={menuStyle.listItemtext}> About Us</span>
+                </ListItem>
+                <Divider />
+                <ListItem
+                  button
+                  onClick={() => {
+                    history.push("/login");
+                    setOpenSideNav(false);
+                  }}
+                  style={menuStyle.listItem}
+                >
+                  <span style={menuStyle.listItemtext}> Login</span>
+                </ListItem>
+                <Divider />
+                <ListItem button onClick={logout} style={menuStyle.listItem}>
+                  <span style={menuStyle.listItemtext}> logout</span>
+                </ListItem>
+              </List>
             </div>
           </div>
-        </Drawer>
+        </SwipeableDrawer>
       </div>
       <Productfinder openSearchDilog={openSearchDilog} />
     </React.Fragment>

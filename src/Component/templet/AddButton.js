@@ -32,7 +32,7 @@ const CustomButton = ({
     setShowLoader(true);
     axios
       .post(add_product_to_basket, {
-        user_id: user_info[0].id,
+        user_id: user_info.id,
         product_id: id,
         product_qnt: amount,
         product_price: price,

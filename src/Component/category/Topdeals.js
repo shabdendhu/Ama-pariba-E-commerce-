@@ -6,7 +6,11 @@ import {
   DialogContent,
   Checkbox,
 } from "@material-ui/core";
-import { get_product_list, get_product_qnt_options } from "../../constants/api";
+import {
+  get_product_list,
+  get_product_qnt_options,
+  get_top_deals,
+} from "../../constants/api";
 import CloseIcon from "@material-ui/icons/Close";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import axios from "axios";
@@ -305,7 +309,7 @@ const TopDeals = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get(get_product_list).then((response) => {
+    axios.get(get_top_deals).then((response) => {
       setProducts(response.data.data);
       // console.log(response.data.data);
     });

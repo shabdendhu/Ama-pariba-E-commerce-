@@ -25,7 +25,7 @@ export const get_product_qnt_options = custumer_api + "get-product-qnt-options";
 export const make_new_order = custumer_api + "make-new-order";
 export const get_productsbycategory = custumer_api + "get-products-by-category";
 export const search_product_by_name = custumer_api + "search-product-by-name";
-export const get_users_details = custumer_api + "get-users-details";
+export const login_with_password = custumer_api + "login-with-password";
 export const register_new_user = custumer_api + "register-new-user";
 export const get_product_details = custumer_api + "get-product-details";
 export const get_recipe_detail = custumer_api + "get-recipe-detail";
@@ -38,3 +38,7 @@ export const remove_product_from_basket =
   custumer_api + "remove-product-from-basket";
 export const get_basket_items = custumer_api + "get-basket-items";
 export const get_search_suggestion = custumer_api + "get-search-suggestion";
+export const get_seasons_best_items = custumer_api + "get-seasons-best-items";
+export const get_top_deals = custumer_api + "get-top-deals";
+export const update_user_details = custumer_api + "update-user-details";
+export const get_user_details = custumer_api + "get-user-details";
