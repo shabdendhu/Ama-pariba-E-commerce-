@@ -42,7 +42,7 @@ const MainCategory = () => {
         <TopDeals />
         <h3 style={style.header}>SHOP BY SEASON'S BEST</h3>
         <Shopbyseasonsbest />
-        <div
+        {/* <div
           style={{
             textAlign: "center",
             margin: "0px 3px 0px 0px",
@@ -57,8 +57,9 @@ const MainCategory = () => {
           >
             VIEW MORE
           </span>
-        </div>
+        </div> */}
         {/* </Link> */}
+        <HomeBanner />
       </div>
     </div>
   );

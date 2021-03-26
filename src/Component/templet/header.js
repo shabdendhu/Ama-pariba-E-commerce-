@@ -21,6 +21,8 @@ import { useEffect } from "react";
 import { userLogout } from "../../actions/authorization";
 import { useDispatch } from "react-redux";
 import { user_info } from "../../constants/storage-keys";
+import { useSelector } from "react-redux";
+
 // import { initialState } from "../../reducer";
 const style = {
   topSection: {
@@ -88,6 +90,7 @@ const menuStyle = {
 const Header = ({ pagetitle }) => {
   const history = useHistory();
   const [{ basket }] = useStateValue();
+  const is_loggedin = useSelector((state) => state.authorization.is_loggedin);
 
   const dispatch = useDispatch();
 
@@ -98,6 +101,7 @@ const Header = ({ pagetitle }) => {
     dispatch(userLogout());
     localStorage.removeItem(user_info);
     setOpenSideNav(false);
+    window.location.reload(true);
   };
   useEffect(() => {
     if (openSideNav) {
@@ -110,7 +114,7 @@ const Header = ({ pagetitle }) => {
 
   return (
     <React.Fragment>
-      <div style={{}}>
+      <div>
         <Card
           style={{
             display: "flex",
@@ -236,7 +240,7 @@ const Header = ({ pagetitle }) => {
               <div
                 style={{
                   backgroundColor: "rgb(89, 26, 7)",
-                  height: "78px",
+                  height: "auto",
                   width: "100%",
                   marginBottom: "10px",
                   display: "flex",
@@ -257,36 +261,39 @@ const Header = ({ pagetitle }) => {
                 >
                   ଆମ ପରିବା
                 </div>
-                <div
-                  style={{
-                    width: "100%",
-                    marginTop: "10px",
-                    // display: "flex",
-                    // justifyContent: "space-around",
-                    color: "white",
-                  }}
-                >
-                  <span
+                {is_loggedin === true && (
+                  <div
                     style={{
-                      border: "1px solid white",
-                      padding: "3px 8px",
-                      margin: "10px",
-                      width: "60px",
+                      width: "100%",
+                      marginTop: "10px",
+                      // display: "flex",
+                      // justifyContent: "space-around",
+                      color: "white",
+                      padding: "2px 0px 12px",
                     }}
                   >
-                    Account
-                  </span>
-                  <span
-                    style={{
-                      border: "1px solid white",
-                      padding: "3px 8px",
-                      margin: "10px",
-                      width: "60px",
-                    }}
-                  >
-                    Orders
-                  </span>
-                </div>
+                    <span
+                      style={{
+                        border: "1px solid white",
+                        padding: "3px 8px",
+                        margin: "10px",
+                        width: "60px",
+                      }}
+                    >
+                      Account
+                    </span>
+                    <span
+                      style={{
+                        border: "1px solid white",
+                        padding: "3px 8px",
+                        margin: "10px",
+                        width: "60px",
+                      }}
+                    >
+                      Orders
+                    </span>
+                  </div>
+                )}
               </div>
 
               <List style={{ padding: "5px" }}>
@@ -320,28 +327,6 @@ const Header = ({ pagetitle }) => {
                   }}
                   style={menuStyle.listItem}
                 >
-                  <span style={menuStyle.listItemtext}> My History</span>
-                </ListItem>{" "}
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    history.push("/my-account");
-                    setOpenSideNav(false);
-                  }}
-                  style={menuStyle.listItem}
-                >
-                  <span style={menuStyle.listItemtext}> My Account</span>
-                </ListItem>{" "}
-                <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    history.push("/");
-                    setOpenSideNav(false);
-                  }}
-                  style={menuStyle.listItem}
-                >
                   <span style={menuStyle.listItemtext}> Need Help</span>
                 </ListItem>{" "}
                 <Divider />
@@ -356,20 +341,55 @@ const Header = ({ pagetitle }) => {
                   <span style={menuStyle.listItemtext}> About Us</span>
                 </ListItem>
                 <Divider />
-                <ListItem
-                  button
-                  onClick={() => {
-                    history.push("/login");
-                    setOpenSideNav(false);
-                  }}
-                  style={menuStyle.listItem}
-                >
-                  <span style={menuStyle.listItemtext}> Login</span>
-                </ListItem>
-                <Divider />
-                <ListItem button onClick={logout} style={menuStyle.listItem}>
-                  <span style={menuStyle.listItemtext}> logout</span>
-                </ListItem>
+                {is_loggedin === true ? (
+                  <>
+                    <ListItem
+                      button
+                      onClick={() => {
+                        history.push("/my-history");
+                        setOpenSideNav(false);
+                      }}
+                      style={menuStyle.listItem}
+                    >
+                      <span style={menuStyle.listItemtext}> My History</span>
+                    </ListItem>{" "}
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={() => {
+                        history.push("/my-account");
+                        setOpenSideNav(false);
+                      }}
+                      style={menuStyle.listItem}
+                    >
+                      <span style={menuStyle.listItemtext}> My Account</span>
+                    </ListItem>{" "}
+                    <Divider />
+                    <ListItem
+                      button
+                      onClick={logout}
+                      style={menuStyle.listItem}
+                    >
+                      <span style={menuStyle.listItemtext}> logout</span>
+                    </ListItem>
+                    <Divider />
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <ListItem
+                      button
+                      onClick={() => {
+                        history.push("/login");
+                        setOpenSideNav(false);
+                      }}
+                      style={menuStyle.listItem}
+                    >
+                      <span style={menuStyle.listItemtext}> Login</span>
+                    </ListItem>
+                    <Divider />
+                  </>
+                )}
               </List>
             </div>
           </div>

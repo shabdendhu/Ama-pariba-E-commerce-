@@ -12,6 +12,7 @@ const RecipesDetails = lazy(() => import("./Component/templet/RecipesDetails"));
 const searchresult = lazy(() => import("./pages/shop/searchresult"));
 const categoty = lazy(() => import("./pages/shop-by-category.js/index"));
 const MyAccount = lazy(() => import("./pages/profile/my-account"));
+const MyHistory = lazy(() => import("./pages/history/my-history"));
 const routes = [
   { path: "/", exact: true, component: MainCategory },
   { path: "/checkout", exact: true, component: Checkout },
@@ -26,6 +27,7 @@ const routes = [
   // { path: "/search-results", exact: true, component: searchresult },
   { path: "/search-results", exact: true, component: searchresult },
   { path: "/my-account", exact: true, component: MyAccount },
+  { path: "/my-history", exact: true, component: MyHistory },
 ];
 
 export default routes;

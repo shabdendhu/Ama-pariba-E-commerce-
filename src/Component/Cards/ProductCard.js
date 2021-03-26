@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { useStateValue } from "../templet/StateProvider";
 import CustomButton from "../templet/AddButton";
-import { get_product_qnt_options } from "../../constants/api";
+import { get_product_qnt_options, site_url } from "../../constants/api";
 import CloseIcon from "@material-ui/icons/Close";
 import axios from "axios";
 import {
@@ -60,6 +60,7 @@ const ProductCard = ({ data }) => {
   );
   console.log(result);
   // console.log("vdjhg[data.product_id]", `${data.product_id}=${result}`);
+  //eslint-disable-next-line
   var currentProductObjct = basket.filter((obj) => obj.item_id == result);
   if (currentProductObjct && currentProductObjct[0]) {
     console.log(currentProductObjct[0].amount);
@@ -199,7 +200,7 @@ const ProductCard = ({ data }) => {
                     // paddingTop: "13px",
                   }}
                   alt={data.product_name}
-                  src={data.image_url}
+                  src={`${site_url}${data.image_url}`}
                 />
               </div>
             </div>

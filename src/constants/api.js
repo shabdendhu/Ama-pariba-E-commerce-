@@ -1,6 +1,6 @@
 const api = () => {
-  let site_url = "http://tynored.ddns.net:9000/";
-  let custumer_api = "http://tynored.ddns.net:9000/customer-app/";
+  let site_url = "";
+  let custumer_api = "";
   if (window.location.hostname === "localhost") {
     // site_url = "http://localhost:9000/";
     // custumer_api = "http://localhost:9000/customer-app/";
@@ -42,3 +42,4 @@ export const get_seasons_best_items = custumer_api + "get-seasons-best-items";
 export const get_top_deals = custumer_api + "get-top-deals";
 export const update_user_details = custumer_api + "update-user-details";
 export const get_user_details = custumer_api + "get-user-details";
+export const user_history = custumer_api + "user-history";

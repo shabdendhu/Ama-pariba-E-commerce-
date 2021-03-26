@@ -3,7 +3,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { get_seasons_best_items } from "../../constants/api";
+import { get_seasons_best_items, site_url } from "../../constants/api";
 const CategoryItem = ({ item }) => {
   return (
     <>
@@ -49,7 +49,7 @@ const CategoryItem = ({ item }) => {
               padding: "5px",
             }}
             alt="seasonaryItems"
-            src={item.image_url}
+            src={`${site_url}${item.image_url}`}
           />
         </div>
         <span style={{ fontWeight: 400, textAlign: "center" }}>

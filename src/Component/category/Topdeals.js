@@ -5,11 +5,13 @@ import {
   DialogTitle,
   DialogContent,
   Checkbox,
+  CircularProgress,
 } from "@material-ui/core";
 import {
   get_product_list,
   get_product_qnt_options,
   get_top_deals,
+  site_url,
 } from "../../constants/api";
 import CloseIcon from "@material-ui/icons/Close";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -118,7 +120,7 @@ const TopDeal = ({ item }) => {
             {item.discount}% off
           </div>
           <img
-            src={item.image_url}
+            src={`${site_url}${item.image_url}`}
             alt={item.product_name}
             style={{ width: "100px" }}
           />
@@ -306,30 +308,42 @@ const TopDeal = ({ item }) => {
 };
 
 const TopDeals = () => {
+  const [showloader, setShowloader] = useState(false);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
+    setShowloader(true);
     axios.get(get_top_deals).then((response) => {
       setProducts(response.data.data);
+      if (response.data.status) {
+        setShowloader(false);
+      }
       // console.log(response.data.data);
     });
   }, []);
   return (
     <>
-      <div
-        className="hide-scroll-bar"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          overflowX: "auto",
-          width: "100%",
-          margin: "10px 0px",
-        }}
-      >
-        {products.map((item, index) => (
-          <TopDeal key={index} item={item} />
-        ))}
-      </div>
+      {showloader ? (
+        <div style={{ textAlign: "center" }}>
+          <CircularProgress />
+        </div>
+      ) : (
+        <div
+          className="hide-scroll-bar"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            overflowX: "auto",
+            width: "100%",
+            margin: "10px 0px",
+          }}
+        >
+          {products.map((item, index) => (
+            <TopDeal key={index} item={item} />
+          ))}
+        </div>
+      )}
+
       {/* {loading && */}
       {/* <div style={{ textAlign: "center" }}>
         <CircularProgress style={{ height: 32, width: 32, color: "#168388" }} />

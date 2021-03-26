@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../Component/templet/header";
 // import Edit from "@material-ui/icons/EditIcon";
 import Edit from "@material-ui/icons/Edit";
@@ -44,6 +44,7 @@ const MyAccount = () => {
     name: "",
     gender: "",
     date_of_birth: "2017-05-24T10:30",
+    img: "",
   });
   const UpdateUserDetail = () => {
     axios
@@ -59,7 +60,10 @@ const MyAccount = () => {
         // getUserDetails();
       });
   };
-  const getUserDetails = () => {
+  const openDrawer = () => {
+    setOpen(true);
+  };
+  useEffect(() => {
     axios.post(get_user_details, { id: user_info.id }).then((response) => {
       const UserData = response.data.data;
       if (response.data.status) {
@@ -70,11 +74,11 @@ const MyAccount = () => {
           gender: UserData.gender,
           date_of_birth: UserData.date_of_birth,
           name: UserData.name,
+          img: UserData.img,
         });
-        setOpen(true);
       }
     });
-  };
+  }, []);
   return (
     <div>
       <Header pagetitle={"My Account"} />
@@ -89,7 +93,21 @@ const MyAccount = () => {
           }}
         >
           <span style={{ flex: 1 }}>
-            <img style={{ height: "60px" }} src="apple.png" />
+            <img style={{ height: "60px" }} src={userDetail.img} />
+            <span
+              style={{
+                position: "absolute",
+                margin: "-25px 0px 0px 37px",
+                background: "#00bd45",
+                color: "#ffffff",
+                display: "flex",
+                borderRadius: "38px",
+                fontSize: "14px",
+                padding: "2px",
+              }}
+            >
+              <Edit style={{ fontSize: "19px" }} />
+            </span>
           </span>
           <span style={{ flex: 3, display: "flex", flexDirection: "column" }}>
             <span
@@ -99,14 +117,14 @@ const MyAccount = () => {
                 fontWeight: 600,
               }}
             >
-              Shabdendhu Tripathy
+              {userDetail.name}
             </span>
-            <span>8984411618</span>
-            <span>tshabdendhu@gmail.com</span>
+            <span>{userDetail.mobile_no}</span>
+            <span>{userDetail.email}</span>
           </span>
           <span
             onClick={() => {
-              getUserDetails();
+              openDrawer();
             }}
           >
             <Edit />
