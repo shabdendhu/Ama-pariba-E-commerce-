@@ -4,6 +4,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { useStateValue } from "../../Component/templet/StateProvider";
 import CustomButton from "../../Component/templet/AddButton";
 import { useEffect } from "react";
+import { site_url } from "../../constants/api";
 
 // import { useStateValue } from "../../StateProvider";/////////////////////
 
@@ -52,7 +53,7 @@ function CheckoutProduct({ item }) {
             >
               <img
                 style={{ width: "100px", height: "100px" }}
-                src={item.image}
+                src={`${site_url}${item.image}`}
                 alt={item.name}
               />
             </div>

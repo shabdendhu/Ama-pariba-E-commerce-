@@ -308,7 +308,7 @@ const Header = ({ pagetitle }) => {
                   <span style={menuStyle.listItemtext}> Home</span>
                 </ListItem>
                 <Divider />
-                <ListItem
+                {/* <ListItem
                   button
                   onClick={() => {
                     history.push("/shop-by-category");
@@ -317,7 +317,7 @@ const Header = ({ pagetitle }) => {
                   style={menuStyle.listItem}
                 >
                   <span style={menuStyle.listItemtext}> Shop By Category</span>
-                </ListItem>
+                </ListItem> */}
                 <Divider />
                 <ListItem
                   button

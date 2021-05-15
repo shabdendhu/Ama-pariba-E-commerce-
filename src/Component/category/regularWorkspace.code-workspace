@@ -1,0 +1,25 @@
+{
+  "folders": [
+	{
+		"path": "../../../.."
+	},
+	{
+		"path": "../../../../../udmyCoad/complete-javascript-course"
+	},
+	{
+		"path": "../../../../../machine_test_round/test-app"
+	},
+	{
+		"path": "../../../../../nodejs-express"
+	},
+	{
+		"path": "../../../../../careipro"
+	},
+	{
+		"path": "../../../../../InterviewSpace"
+	}
+],
+  "settings": {
+    "liveServer.settings.multiRootWorkspaceName": "InterviewSpace"
+  }
+}

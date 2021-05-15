@@ -8,7 +8,7 @@ import {
 } from "../../constants/api";
 import { useHistory } from "react-router-dom";
 
-const DiseaseCard = ({ data }) => {
+const HomeCategoryCard = ({ data }) => {
   const history = useHistory();
   return (
     <Card
@@ -103,7 +103,7 @@ const CategoryCard = ({ all }) => {
               <Grid container>
                 {productCategory.map((deases, index) => (
                   <Grid item xs={6} sm={4} md={2} key={index}>
-                    <DiseaseCard data={deases} />
+                    <HomeCategoryCard data={deases} />
                   </Grid>
                 ))}
               </Grid>

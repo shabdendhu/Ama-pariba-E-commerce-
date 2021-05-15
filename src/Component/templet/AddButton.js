@@ -29,6 +29,7 @@ const CustomButton = ({
   const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
   const [itemAmt, setItemAmt] = useState(0);
   const AddtoBasketApi = () => {
+    alert(user_info.id);
     setShowLoader(true);
     axios
       .post(add_product_to_basket, {
