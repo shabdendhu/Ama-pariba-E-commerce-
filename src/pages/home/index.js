@@ -1,7 +1,7 @@
 import React from "react";
 import CategoryCard from "../../Component/category/categoryCard";
-import Shopbyseasonsbest from "../../Component/category/Shopbyseasonsbest";
-import TopDeals from "../../Component/category/Topdeals";
+import Shopbyseasonsbest from "../../Component/Product/Shopbyseasonsbest";
+import TopDeals from "../../Component/Product/Topdeals";
 import HomeBanner from "../../Component/templet/banner";
 import Header from "../../Component/templet/header";
 const style = {
@@ -27,7 +27,7 @@ const style = {
     textDecoration: "none",
   },
 };
-const MainCategory = () => {
+const Home = () => {
   return (
     <div>
       <Header />
@@ -65,4 +65,4 @@ const MainCategory = () => {
   );
 };
 
-export default MainCategory;
+export default Home;

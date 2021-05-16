@@ -1,8 +1,7 @@
 import React from "react";
-import "./CheckoutProduct.css";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import { useStateValue } from "../../Component/templet/StateProvider";
-import CustomButton from "../../Component/templet/AddButton";
+import { useStateValue } from "../templet/StateProvider";
+import CustomButton from "../templet/AddButton";
 import { useEffect } from "react";
 import { site_url } from "../../constants/api";
 

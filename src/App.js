@@ -27,6 +27,8 @@ function App() {
   // }, []);
   useEffect(() => {
     document.body.style.background = "#efefef";
+    // document.body.style.maxWidth = "600px";
+    // document.body.style.margin = "auto";
     if (is_loggedin) {
       axios
         .post(get_basket_items, {

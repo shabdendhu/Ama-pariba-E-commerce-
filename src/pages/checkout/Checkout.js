@@ -1,6 +1,6 @@
 import React from "react";
-import "./Checkout.css";
-import CheckoutProduct from "./CheckoutProduct";
+// import "./Checkout.css";
+import CheckoutProduct from "../../Component/checkout/CheckoutProduct";
 import CurrencyFormat from "react-currency-format";
 import Header from "../../Component/templet/header";
 import { useStateValue } from "../../Component/templet/StateProvider";

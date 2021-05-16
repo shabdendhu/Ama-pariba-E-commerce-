@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox, Dialog, Slide } from "@material-ui/core";
 import Header from "../templet/header";
-import CustomButton from "./AddButton";
+import CustomButton from "../templet/AddButton";
 import { get_product_details } from "../../constants/api";
 import axios from "axios";
 const Transition = React.forwardRef(function Transition(props, ref) {

@@ -1,6 +1,4 @@
 import React from "react";
-import "./login.css";
-// import { Link } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import Header from "../templet/header";

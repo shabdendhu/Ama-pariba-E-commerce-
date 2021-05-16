@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ProductCard from "../../Component/Cards/ProductCard";
+import ProductCard from "../../Component/Product/ProductCard";
 import Header from "../../Component/templet/header";
 import { user_history } from "../../constants/api";
 

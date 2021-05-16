@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import ProductCard from "../../Component/Cards/ProductCard";
+import ProductCard from "../../Component/Product/ProductCard";
 import HomeBanner from "../../Component/templet/banner";
 import Header from "../../Component/templet/header";
 import { search_product_by_name } from "../../constants/api";

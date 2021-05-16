@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import { useStateValue } from "./StateProvider";
-import Productfinder from "./Productfinder";
+import Productfinder from "../Product/Productfinder";
 import { useEffect } from "react";
 import { userLogout } from "../../actions/authorization";
 import { useDispatch } from "react-redux";
