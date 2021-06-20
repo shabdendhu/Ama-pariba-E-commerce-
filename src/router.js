@@ -2,7 +2,7 @@ import { lazy } from "react";
 // const Home = lazy(() => import("./Component/templet/home"));
 const Checkout = lazy(() => import("./pages/checkout/Checkout"));
 const Home = lazy(() => import("./pages/home/index"));
-const Login = lazy(() => import("./Component/login/login"));
+const Login = lazy(() => import("./Component/login/authorization"));
 const About = lazy(() => import("./pages/about/about"));
 const shopByCategory = lazy(() => import("./pages/shopby/show-items-by-id"));
 

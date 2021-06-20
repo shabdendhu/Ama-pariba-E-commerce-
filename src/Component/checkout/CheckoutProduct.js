@@ -52,7 +52,7 @@ function CheckoutProduct({ item }) {
             >
               <img
                 style={{ width: "100px", height: "100px" }}
-                src={`${site_url}${item.image}`}
+                src={item.image}
                 alt={item.name}
               />
             </div>

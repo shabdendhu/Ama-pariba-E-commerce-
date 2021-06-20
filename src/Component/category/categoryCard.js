@@ -7,15 +7,34 @@ import {
   get_product_category,
 } from "../../constants/api";
 import { useHistory } from "react-router-dom";
+import { gql, useQuery } from "@apollo/client";
 
+const CategoruQuery = gql`
+  query {
+    get_allCategory {
+      id
+      name
+      image
+      is_popular
+    }
+  }
+`;
+const PopularCategoruQuery = gql`
+  query {
+    get_PopularCategory {
+      id
+      name
+      image
+      is_popular
+    }
+  }
+`;
 const HomeCategoryCard = ({ data }) => {
   const history = useHistory();
   return (
     <Card
       onClick={() => {
-        history.push(
-          `/show-items-with-id?id=${data.id}?name=${data.category_name}`
-        );
+        history.push(`/show-items-with-id?id=${data.id}?name=${data.name}`);
       }}
       style={{
         display: "flex",
@@ -33,8 +52,8 @@ const HomeCategoryCard = ({ data }) => {
             width: "45px",
             borderRadius: "30px",
           }}
-          src={data.category_img}
-          alt={data.category_name}
+          src={data.image}
+          alt={data.name}
         />
       </span>
       <span
@@ -45,7 +64,7 @@ const HomeCategoryCard = ({ data }) => {
           alignItems: "center",
         }}
       >
-        {data.category_name}
+        {data.name}
       </span>
     </Card>
   );
@@ -57,30 +76,42 @@ const CategoryCard = ({ all }) => {
   const history = useHistory();
 
   // console.log(all);
+  // useEffect(() => {
+  //   if (all) {
+  //     setShowLoader(true);
+  //     axios.get(get_all_product_category).then((response) => {
+  //       if (response.data.status) {
+  //         setShowLoader(false);
+  //         setProductCategory(response.data.data);
+  //       }
+  //     });
+  //   } else {
+  //     setShowLoader(true);
+  //     axios
+  //       .post(get_product_category, {
+  //         is_popular: 1,
+  //       })
+  //       .then((response) => {
+  //         if (response.data.status) {
+  //           setShowLoader(false);
+  //           setProductCategory(response.data.data);
+  //         }
+  //       });
+  //   }
+  // }, [all]);
+  // graphql
+  const Query = all === true ? CategoruQuery : PopularCategoruQuery;
+  const { networkStatus, called, loading, data } = useQuery(Query);
   useEffect(() => {
-    if (all) {
-      setShowLoader(true);
-      axios.get(get_all_product_category).then((response) => {
-        if (response.data.status) {
-          setShowLoader(false);
-          setProductCategory(response.data.data);
-        }
-      });
-    } else {
-      setShowLoader(true);
-      axios
-        .post(get_product_category, {
-          is_popular: 1,
-        })
-        .then((response) => {
-          if (response.data.status) {
-            setShowLoader(false);
-            setProductCategory(response.data.data);
-          }
-        });
+    setShowLoader(true);
+    if (networkStatus === 7) {
+      console.log(data.get_allCategory);
+      setProductCategory(
+        all === true ? data.get_allCategory : data.get_PopularCategory
+      );
+      setShowLoader(false);
     }
-  }, [all]);
-
+  }, [networkStatus]);
   return (
     <>
       <div>
@@ -101,9 +132,9 @@ const CategoryCard = ({ all }) => {
               }}
             >
               <Grid container>
-                {productCategory.map((deases, index) => (
+                {productCategory.map((data, index) => (
                   <Grid item xs={6} sm={4} md={2} key={index}>
-                    <HomeCategoryCard data={deases} />
+                    <HomeCategoryCard data={data} />
                   </Grid>
                 ))}
               </Grid>

@@ -7,7 +7,7 @@ const HomeBanner = () => {
     "amaparibaBanner.jpg",
     "amaparibaBanner2.jpg",
     "amaparibaBanner3.jpg",
-    "amaparibaBanner4.jpg",
+    "amaparibaBanner4.webp",
   ];
   const [width, setWidth] = useState(window.innerWidth);
   function handleWindowSizeChange() {

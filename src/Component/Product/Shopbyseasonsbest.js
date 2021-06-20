@@ -4,13 +4,35 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { get_seasons_best_items, site_url } from "../../constants/api";
+import { gql, useQuery } from "@apollo/client";
+const AllSeasonsBestItemQuery = gql`
+query{
+  get_allSeasonsBest{
+    id
+    product_id
+    # is_popular
+    Products{
+      id
+      name
+      image
+      qntity{
+        quantity
+        unit{
+          # id
+          # full_name
+          short_name
+        }
+      }
+    }
+  }
+}`
 const CategoryItem = ({ item }) => {
   return (
     <>
       <div
         onClick={() => {
           // const searchName = item.product_name.replace(/ +/g, "");
-          window.location.href = `/search-results?id=${item.product_id}?name=${item.product_name}`;
+          window.location.href = `/search-results?id=${item.Products.id}?name=${item.Products.name}`;
           // console.log(market);
         }}
         style={{
@@ -49,11 +71,11 @@ const CategoryItem = ({ item }) => {
               padding: "5px",
             }}
             alt="seasonaryItems"
-            src={`${site_url}${item.image_url}`}
+            src={item.Products.image}
           />
         </div>
         <span style={{ fontWeight: 400, textAlign: "center" }}>
-          {item.product_name}
+          {item.Products.name}
         </span>
       </div>
     </>
@@ -61,7 +83,7 @@ const CategoryItem = ({ item }) => {
 };
 const Shopbyseasonsbest = () => {
   const [seasonsBest, setSeasonsBest] = useState([]);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowloader] = useState(false);
   const seasonitem = [
     { img: "apple.png", name: "Apple" },
     { img: "orange.png", name: "Orange" },
@@ -73,16 +95,26 @@ const Shopbyseasonsbest = () => {
     { img: "orange.png", name: "Orange" },
     { img: "butterchiken.png", name: "Butterchiken" },
   ];
+  const { networkStatus, called, loading, data } = useQuery(AllSeasonsBestItemQuery);
+
+  // useEffect(() => {
+  //   setShowLoader(true);
+  //   axios.get(`${get_seasons_best_items}/1`).then((response) => {
+  //     // console.log(response.data.data);
+  //     if (response.data.status) {
+  //       setShowLoader(false);
+  //     }
+  //     setSeasonsBest(response.data.data);
+  //   });
+  // }, []);
   useEffect(() => {
-    setShowLoader(true);
-    axios.get(`${get_seasons_best_items}/1`).then((response) => {
-      // console.log(response.data.data);
-      if (response.data.status) {
-        setShowLoader(false);
-      }
-      setSeasonsBest(response.data.data);
-    });
-  }, []);
+    setShowloader(true);
+    if (networkStatus === 7) {
+      console.log("data.get_allTopDeals", data.get_allSeasonsBest);
+      setSeasonsBest(data.get_allSeasonsBest);
+      setShowloader(false);
+    }
+  }, [networkStatus]);
   return (
     <div style={{ background: "#efefef" }}>
       {

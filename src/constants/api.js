@@ -2,15 +2,15 @@ const api = () => {
   let site_url = "";
   let custumer_api = "";
   if (window.location.hostname === "localhost") {
-    // site_url = "http://localhost:9000/";
-    // custumer_api = "http://localhost:9000/customer-app/";
-    site_url = "https://node-deploy-production.herokuapp.com";
-    custumer_api = "https://node-deploy-production.herokuapp.com/customer-app/";
+    site_url = "http://localhost:9000/";
+    custumer_api = "http://localhost:9000/customer-app/";
+    // site_url = "https://node-deploy-production.herokuapp.com";
+    // custumer_api = "https://node-deploy-production.herokuapp.com/customer-app/";
   } else {
-    // site_url = "http://tynored.ddns.net:9000/";
-    // custumer_api = "http://tynored.ddns.net:9000/customer-app/";
-    site_url = "https://node-deploy-production.herokuapp.com";
-    custumer_api = "https://node-deploy-production.herokuapp.com/customer-app/";
+    site_url = "http://tynored.ddns.net:9000/";
+    custumer_api = "http://tynored.ddns.net:9000/customer-app/";
+    // site_url = "https://node-deploy-production.herokuapp.com";
+    // custumer_api = "https://node-deploy-production.herokuapp.com/customer-app/";
   }
   return {
     site_url,
@@ -43,3 +43,4 @@ export const get_top_deals = custumer_api + "get-top-deals";
 export const update_user_details = custumer_api + "update-user-details";
 export const get_user_details = custumer_api + "get-user-details";
 export const user_history = custumer_api + "user-history";
+export const google_clint_id="115704933900-sj32ss7siupsi3041ci1sk3rmi8msn1q.apps.googleusercontent.com"

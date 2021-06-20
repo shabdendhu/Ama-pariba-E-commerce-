@@ -20,7 +20,7 @@ import Productfinder from "../Product/Productfinder";
 import { useEffect } from "react";
 import { userLogout } from "../../actions/authorization";
 import { useDispatch } from "react-redux";
-import { user_info } from "../../constants/storage-keys";
+import { user_info,auth_token,loggedin_as } from "../../constants/storage-keys";
 import { useSelector } from "react-redux";
 
 // import { initialState } from "../../reducer";
@@ -100,6 +100,8 @@ const Header = ({ pagetitle }) => {
   const logout = () => {
     dispatch(userLogout());
     localStorage.removeItem(user_info);
+    localStorage.removeItem(auth_token);
+    localStorage.removeItem(loggedin_as);
     setOpenSideNav(false);
     window.location.reload(true);
   };

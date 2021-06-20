@@ -18,45 +18,108 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import axios from "axios";
 import CustomButton from "../templet/AddButton";
 import { useStateValue } from "../templet/StateProvider";
+import { gql, useQuery } from "@apollo/client";
+const allTopdeals = gql`
+  query {
+    get_allTopDeals {
+      id
+      product_id
+      Products {
+        id
+        name
+        # brand_id
+        image
+        # rating
+        # created_by
+        # updated_by
+        # is_active
+        # category {
+          # id
+          # name
+          # created_by
+          # updated_by
+          # is_active
+        # }
+        # brand {
+        #   id
+        #   name
+        #   company_name
+        #   ratings
+        #   created_by
+        #   updated_by
+        #   is_active
+        # }
+        qntity {
+          id
+          quantity
+          # product_id
+          base_price
+          # unit_id
+          discount
+          # created_by
+          # updated_by
+          # is_active
+          unit {
+            id
+            full_name
+            short_name
+            # created_by
+            # updated_by
+            # is_active
+          }
+        }
+      }
+    }
+  }
+`;
 const TopDeal = ({ item }) => {
+  // console.log(item.Products.qntity[0].quantity.unit.short_name)
   const [{ basket }] = useStateValue();
-  const [productQntOption, setProductQntOption] = useState([]);
-  const [productPrice, setProductPrice] = useState(`${item.product_price}`);
-  const [openAmountPicker, setOpenAmountPicker] = useState(false);
-  const [discountedPrice, setDiscountedPrice] = useState(item.discounted_price);
-  const [productAmount, setProductAmount] = useState(
-    `${item.default_amt}${item.unit_quantity}`
+  const [productQntOption, setProductQntOption] = useState(
+    item.Products.qntity
   );
+  const [discount, setDiscount] = useState(item.Products.qntity[0].discount);
+  const [productPrice, setProductPrice] = useState(
+    `${item.Products.qntity[0].base_price}`
+  );
+  const [quantityId,setQuantityId]=useState(item.Products.qntity[0].id)
+  const [openAmountPicker, setOpenAmountPicker] = useState(false);
+  const [discountedPrice, setDiscountedPrice] = useState(
+    Math.round(
+      item.Products.qntity[0].base_price -
+        (item.Products.qntity[0].base_price *
+          item.Products.qntity[0].discount) /
+          100
+    )
+  );
+  const [productAmount, setProductAmount] = useState(
+    `${item.Products.qntity[0].quantity}${item.Products.qntity[0].unit.short_name}`
+  );
+
   //
+  const productQntSelected = (items) => {
+    console.log(items);
+    setQuantityId(items.id)
+    setProductAmount(`${items.quantity}${items.unit.short_name}`);
+    setProductPrice(items.base_price);
+    setDiscountedPrice(
+      Math.round(items.base_price - (items.base_price * items.discount) / 100)
+    );
+    setDiscount(items.discount);
+    setTimeout(() => {
+      setOpenAmountPicker(false);
+    }, 100);
+  };
   const productId = [];
+  const productAmt = [];
   basket.forEach((item) => {
     productId.push(item.id);
+    productAmt.push(item.amount);
   });
   var count = {};
   productId.forEach(function (i) {
     count[i] = (count[i] || 0) + 1;
   });
-  //
-  const productQntSelected = (items) => {
-    // console.log(items);
-    setProductAmount(`${items.quantity}${items.short_unit}`);
-    setProductPrice(items.price);
-    setDiscountedPrice(items.discounted_price);
-    setTimeout(() => {
-      setOpenAmountPicker(false);
-    }, 100);
-  };
-  const productAmtApi = () => {
-    axios
-      .get(`${get_product_qnt_options}/${item.product_id}`)
-      .then((response) => {
-        let qntydata = response.data;
-        if (qntydata.status === true && qntydata.data.length > 0) {
-          setProductQntOption(response.data.data);
-          setOpenAmountPicker(true);
-        }
-      });
-  };
   useEffect(() => {
     if (openAmountPicker) {
       document.body.style.overflow = "hidden";
@@ -65,6 +128,7 @@ const TopDeal = ({ item }) => {
       document.body.style.overflow = "unset";
     }
   }, [openAmountPicker]);
+
   return (
     <>
       <Card
@@ -96,6 +160,7 @@ const TopDeal = ({ item }) => {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
+            position:'relative'
           }}
         >
           {" "}
@@ -107,20 +172,21 @@ const TopDeal = ({ item }) => {
               borderRadius: "0px 0px 45px 45px",
               fontSize: "13px",
               height: "13px",
-              width: "100px",
+              width: "95px",
               // position: "absolute",
               // margin: "-124px -18px 0px -5px",
               textAlign: "center",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              marginTop: "-2px",
+              position: "absolute",
+              top: 0,
             }}
           >
-            {item.discount}% off
+            {discount}% off
           </div>
           <img
-            src={`${site_url}${item.image_url}`}
+            src={item.Products.image}
             alt={item.product_name}
             style={{ width: "100px" }}
           />
@@ -144,7 +210,8 @@ const TopDeal = ({ item }) => {
           </span>
           <div
             onClick={() => {
-              productAmtApi();
+              // productAmtApi();
+              setOpenAmountPicker(true);
             }}
             style={{
               borderRadius: "5px",
@@ -184,14 +251,15 @@ const TopDeal = ({ item }) => {
             }}
           >
             <CustomButton
-              id={item.product_id}
-              image={item.image_url}
-              name={item.product_name}
+              id={item.Products.id}
+              image={item.Products.image_url}
+              name={item.Products.product_name}
               amount={productAmount}
-              price={parseInt(productPrice)}
+              price={parseInt(discountedPrice)}
               width="117px"
               stage="add"
-              count={count[item.product_id]}
+              count={count[item.Products.id]}
+              quantityId={quantityId}
             />
           </div>
         </div>
@@ -224,7 +292,7 @@ const TopDeal = ({ item }) => {
                 color: "#a70606",
               }}
             >
-              {item.product_name}
+              {item.Products.name}
             </span>
             <span
               onClick={() => {
@@ -264,7 +332,7 @@ const TopDeal = ({ item }) => {
                 }}
               >
                 <span>
-                  {item.quantity} {item.short_unit}
+                  {item.quantity} {item.unit.short_name}
                   <del
                     style={{
                       marginLeft: "90px",
@@ -272,7 +340,7 @@ const TopDeal = ({ item }) => {
                       fontWeight: 500,
                     }}
                   >
-                    ₹{item.price}
+                    ₹{item.base_price}
                   </del>
                   <span
                     style={{
@@ -281,7 +349,10 @@ const TopDeal = ({ item }) => {
                       fontWeight: 600,
                     }}
                   >
-                    ₹{item.discounted_price}
+                    ₹
+                    {Math.round(
+                      item.base_price - (item.base_price * item.discount) / 100
+                    )}
                   </span>
                 </span>
                 <span
@@ -310,17 +381,25 @@ const TopDeal = ({ item }) => {
 const TopDeals = () => {
   const [showloader, setShowloader] = useState(false);
   const [products, setProducts] = useState([]);
-
+  const { networkStatus, called, loading, data } = useQuery(allTopdeals);
+  // useEffect(() => {
+  //   setShowloader(true);
+  //   axios.get(get_top_deals).then((response) => {
+  //     setProducts(response.data.data);
+  //     if (response.data.status) {
+  //       setShowloader(false);
+  //     }
+  //     // console.log(response.data.data);
+  //   });
+  // }, []);
   useEffect(() => {
     setShowloader(true);
-    axios.get(get_top_deals).then((response) => {
-      setProducts(response.data.data);
-      if (response.data.status) {
-        setShowloader(false);
-      }
-      // console.log(response.data.data);
-    });
-  }, []);
+    if (networkStatus === 7) {
+      console.log("data.get_allTopDeals", data.get_allTopDeals);
+      setProducts(data.get_allTopDeals);
+      setShowloader(false);
+    }
+  }, [networkStatus]);
   return (
     <>
       {showloader ? (

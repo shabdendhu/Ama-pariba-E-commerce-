@@ -15,30 +15,42 @@ import {
 import { useHistory } from "react-router-dom";
 
 const ProductCard = ({ data }) => {
-  // console.log(data);
+  // console.log("productCard", data);
   const history = useHistory();
+
+  const defaultData = data.Quantity[0] ? data.Quantity[0] : { Unit: {} };
   const [openAmountPicker, setOpenAmountPicker] = useState(false);
   const [{ basket }] = useStateValue();
-  const [productQntOption, setProductQntOption] = useState([]);
-  const [Discount, setDiscount] = useState(data.discount);
-  const [discountedPrice, setDiscountedPrice] = useState(data.discounted_price);
-  const [productPrice, setProductPrice] = useState(`${data.product_price}`);
-  const [productAmount, setProductAmount] = useState(
-    `${data.default_amt}${data.unit_quantity}`
+  // const [productQntOption, setProductQntOption] = useState([]);
+  const [discount, setDiscount] = useState(defaultData.discount);
+  const [discountedPrice, setDiscountedPrice] = useState(
+    Math.round(
+      defaultData.base_price -
+        (defaultData.base_price * defaultData.discount) / 100
+    )
   );
-
+  const [quantityId,setQuantityId]=useState(defaultData.id)
+  const [productPrice, setProductPrice] = useState(`${defaultData.base_price}`);
+  const [productAmount, setProductAmount] = useState(
+    `${defaultData.quantity}${defaultData.Unit.short_name}`
+  );
+  // const discount=0
+  // data.Quantity.forEach((element, index) => {
+  //   if (element) {
+  //     discount < element.discount && setDiscount(element.discount);
+  //   }
+  // });
   const productId = [];
   const productAmt = [];
   basket.forEach((item) => {
     productId.push(item.id);
     productAmt.push(item.amount);
   });
-  // console.log("productAmt", productAmt);
-
   var count = {};
   productId.forEach(function (i) {
     count[i] = (count[i] || 0) + 1;
   });
+  // console.log("countFrom productCard",count[data.id])
   //logic to get the item_id from basket if the product_id existt
   const Item_id = [];
   const Id = [];
@@ -56,49 +68,17 @@ const ProductCard = ({ data }) => {
   Item_id.forEach((item_id, i) => (vdjhg[item_id] = Id[i]));
   // }
   const result = Object.keys(vdjhg).find(
-    (key) => vdjhg[key] === data.product_id
+    (key) => vdjhg[key] === data.id
   );
-  console.log(result);
-  // console.log("vdjhg[data.product_id]", `${data.product_id}=${result}`);
-  //eslint-disable-next-line
-  var currentProductObjct = basket.filter((obj) => obj.item_id == result);
-  if (currentProductObjct && currentProductObjct[0]) {
-    console.log(currentProductObjct[0].amount);
-  }
-  const productAmtApi = () => {
-    axios
-      .get(`${get_product_qnt_options}/${data.product_id}`)
-      .then((response) => {
-        let qntydata = response.data;
-        if (qntydata.status === true && qntydata.data.length > 0) {
-          setProductQntOption(response.data.data);
-          console.log(response.data.data);
-          setOpenAmountPicker(true);
-        }
-      });
-  };
-  // const currentProductData = () => {
-  //   if (result) {
-  //     axios
-  //       .get(`${get_product_qnt_options}/${data.product_id}`)
-  //       .then((response) => {
-  //         let qntydata = response.data;
-  //         if (qntydata.status === true && qntydata.data.length > 0) {
-  //           var Data = response.data.data;
-  //           var ProductObjct = Data.filter(
-  //             (obj) => obj.quantity == currentProductObjct[0].amount
-  //           );
-  //           productQntSelected(ProductObjct[0]);
-  //           // console.log(ProductObjct[0]);
-  //         }
-  //       });
-  //   }
-  // };
+  console.log("resultFrom productCard",vdjhg)
   const productQntSelected = (item) => {
+    setQuantityId(item.id)
     setDiscount(item.discount);
-    setProductAmount(`${item.quantity}${item.short_unit}`);
-    setProductPrice(item.price);
-    setDiscountedPrice(item.discounted_price);
+    setProductAmount(`${item.quantity}${item.Unit.short_name}`);
+    setProductPrice(`${defaultData.base_price}`);
+    setDiscountedPrice(
+      Math.round(item.base_price - (item.base_price * item.discount) / 100)
+    );
     setTimeout(() => {
       setOpenAmountPicker(false);
     }, 100);
@@ -111,33 +91,6 @@ const ProductCard = ({ data }) => {
       document.body.style.overflow = "unset";
     }
   }, [openAmountPicker]);
-  // useEffect(() => {
-  //   currentProductData();
-  // }, [basket]);
-  useEffect(() => {
-    if (result) {
-      axios
-        .get(`${get_product_qnt_options}/${data.product_id}`)
-        .then((response) => {
-          let qntydata = response.data;
-          if (qntydata.status === true && qntydata.data.length > 0) {
-            var Data = response.data.data;
-            var ProductObjct = Data.filter(
-              (obj) => obj.quantity == parseInt(currentProductObjct[0].amount)
-            );
-            if (ProductObjct[0]) {
-              productQntSelected(ProductObjct[0]);
-            }
-
-            console.log(
-              parseInt(currentProductObjct[0].amount),
-              Data,
-              ProductObjct
-            );
-          }
-        });
-    }
-  }, [result]);
   return (
     <>
       <React.Fragment>
@@ -166,6 +119,7 @@ const ProductCard = ({ data }) => {
                   marginRight: "19px",
                   background: "rgb(253, 253, 253)",
                   boxShadow: "0 5px 15px rgba(0,0,0,.05)",
+                  position: "relative",
                 }}
               >
                 <div
@@ -176,22 +130,23 @@ const ProductCard = ({ data }) => {
                     borderRadius: "0px 0px 45px 45px",
                     fontSize: "13px",
                     height: "13px",
-                    width: "100px",
+                    width: "95px",
                     // position: "absolute",
                     // margin: "-124px -18px 0px -5px",
                     textAlign: "center",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    marginTop: "-5px",
+                    position: "absolute",
+                    top: 0,
                   }}
                 >
-                  {Discount}% off
+                  {discount}% off
                 </div>
                 <img
                   onClick={() => {
                     history.push(
-                      `/product-details?id=${data.product_id}?name=${data.product_name}`
+                      `/product-details?id=${data.id}?name=${data.name}`
                     );
                   }}
                   style={{
@@ -199,8 +154,8 @@ const ProductCard = ({ data }) => {
                     height: "100px",
                     // paddingTop: "13px",
                   }}
-                  alt={data.product_name}
-                  src={`${site_url}${data.image_url}`}
+                  alt={data.name}
+                  src={data.image}
                 />
               </div>
             </div>
@@ -221,7 +176,7 @@ const ProductCard = ({ data }) => {
                   margin: "9px 0px",
                 }}
               >
-                {data.product_name}
+                {data.name}
               </div>
               <div
                 style={
@@ -232,7 +187,7 @@ const ProductCard = ({ data }) => {
               >
                 <div
                   onClick={() => {
-                    productAmtApi(data.product_id);
+                    setOpenAmountPicker(true);
                   }}
                   style={{
                     borderRadius: "5px",
@@ -253,6 +208,9 @@ const ProductCard = ({ data }) => {
                       }
                     }
                   >
+                    {/* {data.Quantity[0]
+                      ? `${data.Quantity[0].quantity} ${data.Quantity[0].Unit.short_name}`
+                      : ``} */}
                     {productAmount}
                   </span>
                   <span
@@ -284,15 +242,16 @@ const ProductCard = ({ data }) => {
             style={{ float: "right", marginTop: "-44px", marginRight: "14px" }}
           >
             <CustomButton
-              id={data.product_id}
-              image={data.image_url}
-              name={data.product_name}
+              id={data.id}
+              image={data.image}
+              name={data.name}
               amount={productAmount}
-              price={parseInt(productPrice)}
+              price={parseInt(discountedPrice)}
               width="117px"
               stage="add"
-              count={count[data.product_id]}
-              item_id={result}
+              count={count[data.id]}
+              quantityId={quantityId}
+              // item_id={result}
             />
           </div>
         </div>
@@ -303,12 +262,9 @@ const ProductCard = ({ data }) => {
         onClose={() => {
           setOpenAmountPicker(false);
         }}
-        // aria-labelledby="customized-dialog-title"
         open={openAmountPicker}
-        // style={{ width: "fit-" }}
       >
         <DialogTitle
-          // id="customized-dialog-title"
           style={{ borderBottom: "1px solid gray", padding: "7px" }}
           onClose={() => {
             setOpenAmountPicker(false);
@@ -329,7 +285,7 @@ const ProductCard = ({ data }) => {
                 color: "#a70606",
               }}
             >
-              {data.product_name}
+              {data.name}
             </span>
             <span
               onClick={() => {
@@ -351,96 +307,67 @@ const ProductCard = ({ data }) => {
           </div>
         </DialogTitle>
         <DialogContent style={{ padding: "9px 8px" }}>
-          {productQntOption.map((item, index) => (
-            <div
-              key={index}
-              style={{
-                // padding: "9px 8px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              <Card
+          {data.Quantity &&
+            data.Quantity.map((item, index) => (
+              <div
+                key={index}
                 style={{
-                  // border: "1px solid #00e7ff",
-                  // background: "gainsboro",
-                  padding: "5px",
-                  borderRadius: "4px",
-                  fontSize: "19px",
-                  marginBottom: " 10px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                 }}
               >
-                <span>
-                  {item.quantity} {item.short_unit}
-                  <del
-                    style={{
-                      marginLeft: "90px",
-                      color: "green",
-                      fontWeight: 500,
-                    }}
-                  >
-                    ₹{item.price}
-                  </del>
-                  <span
-                    style={{
-                      marginLeft: "14px",
-                      color: "green",
-                      fontWeight: 600,
-                    }}
-                  >
-                    ₹{item.discounted_price}
-                  </span>
-                </span>
-                <span
+                <Card
                   style={{
-                    right: 0,
-                    position: "absolute",
-                    margin: "-1px 15px 0px 0px",
+                    padding: "5px",
+                    borderRadius: "4px",
+                    fontSize: "19px",
+                    marginBottom: " 10px",
                   }}
                 >
-                  <Checkbox
-                    style={{ padding: "0px" }}
-                    onClick={() => {
-                      productQntSelected(item);
+                  <span>
+                    {item.quantity} {item.Unit.short_name}
+                    <del
+                      style={{
+                        marginLeft: "90px",
+                        color: "green",
+                        fontWeight: 500,
+                      }}
+                    >
+                      ₹{item.base_price}
+                    </del>
+                    <span
+                      style={{
+                        marginLeft: "14px",
+                        color: "green",
+                        fontWeight: 600,
+                      }}
+                    >
+                      ₹
+                      {Math.round(
+                        item.base_price -
+                          (item.base_price * item.discount) / 100
+                      )}
+                    </span>
+                  </span>
+                  <span
+                    style={{
+                      right: 0,
+                      position: "absolute",
+                      margin: "-1px 15px 0px 0px",
                     }}
-                  />
-                </span>
-              </Card>
-              {/* <Card
-								style={{
-									// border: " 1px solid #00e7ff",
-									// background: "gainsboro",
-									padding: "5px",
-									borderRadius: "4px",
-									fontSize: "19px",
-									marginBottom: " 10px",
-								}}
-							>
-								<span>{item.option_2}</span>
-								<span
-									style={{
-										right: 0,
-										position: "absolute",
-										margin: "-1px 15px 0px 0px",
-									}}
-								>
-									<Checkbox
-										style={{ padding: "0px" }}
-										onClick={() => {
-											productQntSelected(item.option_2);
-										}}
-									/>
-								</span>
-							</Card> */}
-            </div>
-          ))}
+                  >
+                    <Checkbox
+                      style={{ padding: "0px" }}
+                      onClick={() => {
+                        productQntSelected(item);
+                      }}
+                    />
+                  </span>
+                </Card>
+              </div>
+            ))}
         </DialogContent>
-        {/* <DialogActions>
-          <Button autoFocus color="primary">
-            More Options
-          </Button>
-        </DialogActions> */}
       </Dialog>
     </>
   );

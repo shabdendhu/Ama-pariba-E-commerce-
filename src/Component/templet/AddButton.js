@@ -3,12 +3,32 @@ import React, { useState, useEffect } from "react";
 import Add from "@material-ui/icons/Add";
 import Remove from "@material-ui/icons/Remove";
 import { useSelector } from "react-redux";
+import { gql, useMutation } from "@apollo/client";
 import axios from "axios";
 import { useStateValue } from "../templet/StateProvider";
 import {
   add_product_to_basket,
   remove_product_from_basket,
 } from "../../constants/api";
+const AddToBasketMutation = gql`
+  mutation ($product_id: Int!, $quantity_id: Int!, $user_id: Int!) {
+    create_new_basket(
+      input: {
+        product_id: $product_id
+        quantity_id: $quantity_id
+        user_id: $user_id
+      }
+    ) {
+      id
+      product_id
+      product {
+        id
+        name
+        image
+      }
+    }
+  }
+`;
 
 const CustomButton = ({
   id,
@@ -20,46 +40,70 @@ const CustomButton = ({
   count,
   width,
   item_id,
+  quantityId,
 }) => {
   const [{ basket }, dispacher] = useStateValue();
-  // console.log("basket", basket);
+  // console.log("basket", count);
   const [showLoader, setShowLoader] = useState(false);
   const user_info = useSelector((state) => state.authorization.user_info);
   const [basketItemId, setBasketItemId] = useState(item_id);
   const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
   const [itemAmt, setItemAmt] = useState(0);
+  const [AddMutation, addingres] = useMutation(AddToBasketMutation);
   const AddtoBasketApi = () => {
-    alert(user_info.id);
     setShowLoader(true);
-    axios
-      .post(add_product_to_basket, {
-        user_id: user_info.id,
+    // axios
+    //   .post(add_product_to_basket, {
+    //     user_id: user_info.id,
+    //     product_id: id,
+    //     product_qnt: amount,
+    //     product_price: price,
+    //     // product_count: "7",
+    //     product_name: name,
+    //     image_url: image,
+    //   })
+    //   .then((response) => {
+    //     console.log(response.data.data);
+    //     const AddResponse = response.data.data;
+    //     // setBasketItemId(AddResponse.id);
+    //     dispacher({
+    //       type: "ADD_TO_BASKET",
+    //       item: {
+    //         id: AddResponse.product_id,
+    //         image: AddResponse.image_url,
+    //         name: AddResponse.product_name,
+    //         amount: AddResponse.product_qnt,
+    //         price: AddResponse.product_name,
+    //         item_id: AddResponse.id,
+    //       },
+    //     });
+    //     if (response.data.status) {
+    //       setShowLoader(false);
+    //     }
+    //   });
+    setItemAmt(itemAmt + 1);
+    AddMutation({
+      variables: {
         product_id: id,
-        product_qnt: amount,
-        product_price: price,
-        // product_count: "7",
-        product_name: name,
-        image_url: image,
-      })
-      .then((response) => {
-        console.log(response.data.data);
-        const AddResponse = response.data.data;
-        // setBasketItemId(AddResponse.id);
-        dispacher({
-          type: "ADD_TO_BASKET",
-          item: {
-            id: AddResponse.product_id,
-            image: AddResponse.image_url,
-            name: AddResponse.product_name,
-            amount: AddResponse.product_qnt,
-            price: AddResponse.product_name,
-            item_id: AddResponse.id,
-          },
-        });
-        if (response.data.status) {
-          setShowLoader(false);
-        }
+        quantity_id: quantityId,
+        user_id: user_info.id,
+      },
+    }).then((res) => {
+      const Res = res.data.create_new_basket;
+      console.log("ADD_TO_BASKET", Res);
+      dispacher({
+        type: "ADD_TO_BASKET",
+        item: {
+          id: Res.product.id,
+          image: Res.product.image,
+          name: Res.product.name,
+          amount: amount,
+          price: price,
+          item_id: Res.id,
+        },
       });
+      setShowLoader(false);
+    });
   };
   const RemoveProductFromBasket = () => {
     // alert(item_id);
@@ -83,22 +127,11 @@ const CustomButton = ({
   const addToBasket = () => {
     console.log(isLoggedIn);
     if (isLoggedIn) {
-      setItemAmt(itemAmt + 1);
-      // dispacher({
-      //   type: "ADD_TO_BASKET",
-      //   item: {
-      //     id: id,
-      //     image: image,
-      //     name: name,
-      //     amount: amount,
-      //     price: price,
-      //     // item_id: item_id,
-      //   },
-      // });
       AddtoBasketApi();
     } else {
       window.location.href = "/login";
     }
+    console.log(basket);
   };
   const removeFromBasket = () => {
     setItemAmt(itemAmt - 1);

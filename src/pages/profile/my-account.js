@@ -35,16 +35,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 const MyAccount = () => {
   const user_info = useSelector((state) => state.authorization.user_info);
+  console.log("user_info",user_info)
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [userDetail, setUserDetail] = useState({
-    mobile_no: "",
+    mobile_no: user_info.mobile_no,
     // password: "",
-    email: "",
-    name: "",
-    gender: "",
-    date_of_birth: "2017-05-24T10:30",
-    img: "",
+    email: user_info.email_id,
+    name: user_info.name,
+    gender: user_info.gender,
+    date_of_birth: user_info.dob,
+    img:user_info.img,
   });
   const UpdateUserDetail = () => {
     axios
@@ -63,22 +64,22 @@ const MyAccount = () => {
   const openDrawer = () => {
     setOpen(true);
   };
-  useEffect(() => {
-    axios.post(get_user_details, { id: user_info.id }).then((response) => {
-      const UserData = response.data.data;
-      if (response.data.status) {
-        setUserDetail({
-          ...userDetail,
-          mobile_no: UserData.mobile_no,
-          email: UserData.email,
-          gender: UserData.gender,
-          date_of_birth: UserData.date_of_birth,
-          name: UserData.name,
-          img: UserData.img,
-        });
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.post(get_user_details, { id: user_info.id }).then((response) => {
+  //     const UserData = response.data.data;
+  //     if (response.data.status) {
+  //       setUserDetail({
+  //         ...userDetail,
+  //         mobile_no: UserData.mobile_no,
+  //         email: UserData.email,
+  //         gender: UserData.gender,
+  //         date_of_birth: UserData.date_of_birth,
+  //         name: UserData.name,
+  //         img: UserData.img,
+  //       });
+  //     }
+  //   });
+  // }, []);
   return (
     <div>
       <Header pagetitle={"My Account"} />

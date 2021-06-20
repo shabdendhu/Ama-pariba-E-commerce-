@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { gql, useMutation } from "@apollo/client";
+import { useDispatch, useSelector } from "react-redux";
+import { useLazyQuery, useQuery, gql, useMutation } from "@apollo/client";
+import Header from "../templet/header";
+import Axios from "axios";
 import { Snackbar } from "@material-ui/core";
+import SwipeableViews from "react-swipeable-views";
 import {
   loggedin_as,
   user_info,
@@ -19,10 +22,23 @@ const loginMutation = gql`
       data {
         id
         name
-        email_id
-        gender
         token
-        dob
+        email_id
+        user_type
+        mobile_no
+      }
+    }
+  }
+`;
+const REGISTER_MUTATION = gql`
+  mutation ($email_id: String, $password: String) {
+    register(input: { email_id: $email_id, password: $password }) {
+      status
+      message
+      data {
+        id
+        name
+        email_id
         user_type
         mobile_no
       }
@@ -30,7 +46,7 @@ const loginMutation = gql`
   }
 `;
 
-const Login = () => {
+const Register = () => {
   const [error, setError] = useState({ hasError: false, message: "" });
   const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({
@@ -52,36 +68,44 @@ const Login = () => {
     window.history.go("-1");
     console.log("data1", response);
   };
-  const [LoginMutation, loginRes] = useMutation(loginMutation);
-  const SignIn = () => {
-    LoginMutation({
+  const [RegisterMutation, registerRes] = useMutation(REGISTER_MUTATION);
+  // const [LoginMutation, loginRes] = useMutation(loginMutation);
+  // const SignIn = () => {
+  //   LoginMutation({
+  //     variables: {
+  //       email_id: userDetails.email_id,
+  //       password: userDetails.password,
+  //     },
+  //   }).then((res) => {
+  //     const response = res.data.login;
+  //     if (response.status) {
+  //       rememberUserdata(res.data.login.data);
+  //     } else {
+  //       setError({ hasError: true, message: response.message });
+  //     }
+  //   });
+  // };
+  const resister = () => {
+    RegisterMutation({
       variables: {
         email_id: userDetails.email_id,
         password: userDetails.password,
       },
     }).then((res) => {
-      const response = res.data.login;
-      if (response.status) {
-        rememberUserdata(res.data.login.data);
-      } else {
-        setError({ hasError: true, message: response.message });
-      }
+      const response = res.data;
+      console.log(response);
     });
   };
   const onSuccess = (res) => {
     console.log("Login Success: currentUser:", res);
-    LoginMutation({
+    RegisterMutation({
       variables: {
         email_id: res.profileObj.email,
         password: res.profileObj.googleId,
       },
     }).then((res) => {
-      const response = res.data.login;
-      if (response.status) {
-        rememberUserdata(res.data.login.data);
-      } else {
-        setError({ hasError: true, message: response.message });
-      }
+      const response = res.data;
+      console.log(response);
     });
     refreshTokenSetup(res);
   };
@@ -179,23 +203,22 @@ const Login = () => {
           style={{
             width: "80%",
             border: "none",
-            background: "#00b186",
+            background: "#0e8a45",
             height: "35px",
             borderRadius: "10px",
             color: "white",
             fontSize: "19px",
             fontWeight: 700,
-            marginBottom: "10px",
             outline: "none",
           }}
           onClick={() => {
-            SignIn();
+            resister();
           }}
         >
-          log In
+          Creat account
         </button>
         <button
-          onClick={signIn}
+          onClick={resister}
           style={{
             cursor: "pointer",
             display: "block",
@@ -248,4 +271,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
