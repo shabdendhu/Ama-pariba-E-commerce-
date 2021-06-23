@@ -14,19 +14,10 @@ import ApolloClientLayout from "../src/Component/templet/appolo-provider";
 // import { get_basket_items } from "../src/constants";
 
 function App() {
-  // useEffect(() => {
-  // eslint-disable-next-line
-  const [{ basket }, dispacher] = useStateValue();
-  console.log(basket);
-  const user_info = useSelector((state) => state.authorization.user_info);
-  const is_loggedin = useSelector((state) => state.authorization.is_loggedin);
-
-  useEffect(() => {
+   useEffect(() => {
     document.body.style.background = "#efefef";
     // document.body.style.maxWidth = "600px";
     // document.body.style.margin = "auto";
-    if (is_loggedin) {
-    }
   }, []);
 
   return (

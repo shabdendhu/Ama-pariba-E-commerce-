@@ -36,10 +36,11 @@ const get_basket_by_idQuery = gql`
   }
 `;
 const MainComponent = () => {
+  const user_info = useSelector((state) => state.authorization.user_info);
   const [{ basket }, dispacher] = useStateValue();
   const { networkStatus, called, loading, data } = useQuery(
     get_basket_by_idQuery,
-    { variables: { id: 1 } }
+    { variables: { id: user_info.id } }
   );
   useEffect(() => {
     if (networkStatus === 7) {

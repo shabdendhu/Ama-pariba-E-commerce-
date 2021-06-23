@@ -5,7 +5,7 @@ import Login from "./login";
 import Register from "./register";
 
 const Authentication = () => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const openPage = (page) => {
     setActiveTab(page);
   };
