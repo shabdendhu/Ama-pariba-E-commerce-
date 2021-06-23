@@ -9,6 +9,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
+import { useSelector } from "react-redux";
 import { gql, useQuery } from "@apollo/client";
 
 const get_basket_by_idQuery = gql`
@@ -40,7 +41,7 @@ const MainComponent = () => {
   const [{ basket }, dispacher] = useStateValue();
   const { networkStatus, called, loading, data } = useQuery(
     get_basket_by_idQuery,
-    { variables: { id: user_info.id } }
+    { variables: { id: user_info&&user_info.id } }
   );
   useEffect(() => {
     if (networkStatus === 7) {
