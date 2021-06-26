@@ -26,10 +26,23 @@ const AddToBasketMutation = gql`
         name
         image
       }
+      quantityOption {
+        id
+        quantity
+        unit {
+          short_name
+        }
+      }
     }
   }
 `;
-
+const RemoveFromBasket = gql`
+  mutation ($id: Int!, $is_active: Int) {
+    update_basket(input: { id: $id, is_active: $is_active }) {
+      status
+    }
+  }
+`;
 const CustomButton = ({
   id,
   image,
@@ -42,6 +55,7 @@ const CustomButton = ({
   item_id,
   quantityId,
 }) => {
+  
   const [{ basket }, dispacher] = useStateValue();
   // console.log("basket", count);
   const [showLoader, setShowLoader] = useState(false);
@@ -50,6 +64,7 @@ const CustomButton = ({
   const isLoggedIn = useSelector((state) => state.authorization.is_loggedin);
   const [itemAmt, setItemAmt] = useState(0);
   const [AddMutation, addingres] = useMutation(AddToBasketMutation);
+  const [RemoveMutation, removeRes] = useMutation(RemoveFromBasket);
   const AddtoBasketApi = () => {
     setShowLoader(true);
     // axios
@@ -97,6 +112,7 @@ const CustomButton = ({
           id: Res.product.id,
           image: Res.product.image,
           name: Res.product.name,
+          quantityId: Res.quantityOption.id,
           amount: amount,
           price: price,
           item_id: Res.id,
@@ -106,22 +122,31 @@ const CustomButton = ({
     });
   };
   const RemoveProductFromBasket = () => {
-    // alert(item_id);
+    alert(item_id);
     setShowLoader(true);
 
-    axios
-      .post(remove_product_from_basket, {
-        // product_id: id,
-        // product_qnt: parseInt(amount),
-        // user_id: user_info[0].id,
-        item_id: item_id,
-      })
-      .then((response) => {
-        if (response.data.status) {
-          setShowLoader(false);
-        }
-        // console.log(response.data.data);
-      });
+    RemoveMutation({
+      variables: {
+        id: parseInt(item_id),
+        is_active: 0,
+      },
+    }).then((res) => {
+      console.log("res", res);
+      setShowLoader(false);
+    });
+    // axios
+    //   .post(remove_product_from_basket, {
+    //     // product_id: id,
+    //     // product_qnt: parseInt(amount),
+    //     // user_id: user_info[0].id,
+    //     item_id: item_id,
+    //   })
+    //   .then((response) => {
+    //     if (response.data.status) {
+    //       setShowLoader(false);
+    //     }
+    //     // console.log(response.data.data);
+    //   });
   };
 
   const addToBasket = () => {
@@ -137,7 +162,7 @@ const CustomButton = ({
     setItemAmt(itemAmt - 1);
     dispacher({
       type: "REMOVE_FROM_BASKET",
-      id: id,
+      item_id: parseInt(item_id),
     });
     RemoveProductFromBasket();
   };

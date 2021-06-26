@@ -18,11 +18,12 @@ const reducer = (state, action) => {
       //logic to rempove from basket
       let newBasket = [...state.basket];
       const index = state.basket.findIndex(
-        (basketItem) => basketItem.id === action.id
+        (basketItem) => basketItem.item_id === action.item_id
       );
       if (index >= 0) {
         newBasket.splice(index, 1);
       }
+      console.log("index",state.basket)
       // else {
       //   console.log.warn(
       //     `cant remove product (id: ${action.id}) as its ont in basket`

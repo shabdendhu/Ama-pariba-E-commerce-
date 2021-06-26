@@ -9,7 +9,7 @@ import {
 } from "../../constants/storage-keys";
 import { useGoogleLogin } from "react-google-login";
 import { loggedinAction } from "../../actions/authorization";
-import { google_clint_id } from "../../constants/api";
+// import { google_clint_id } from "../../constants/api";
 import { refreshTokenSetup } from "../../constants/refreshToken";
 const loginMutation = gql`
   mutation ($email_id: String!, $password: String!) {
@@ -91,14 +91,15 @@ const Login = () => {
     //   `Failed to login. 😢 Please ping this to repo owner twitter.com/sivanesh_fiz`
     // );
   };
+  const clientId ="115704933900-sj32ss7siupsi3041ci1sk3rmi8msn1q.apps.googleusercontent.com"
   const { signIn } = useGoogleLogin({
     onSuccess,
     onFailure,
-    google_clint_id,
+    clientId,
     isSignedIn: true,
     accessType: "offline",
     // responseType: 'code',
-    // prompt: 'consent',
+    prompt: 'consent',
   });
   return (
     <>

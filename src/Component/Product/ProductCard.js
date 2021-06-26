@@ -29,7 +29,7 @@ const ProductCard = ({ data }) => {
         (defaultData.base_price * defaultData.discount) / 100
     )
   );
-  const [quantityId,setQuantityId]=useState(defaultData.id)
+  const [quantityId, setQuantityId] = useState(defaultData.id);
   const [productPrice, setProductPrice] = useState(`${defaultData.base_price}`);
   const [productAmount, setProductAmount] = useState(
     `${defaultData.quantity}${defaultData.Unit.short_name}`
@@ -50,29 +50,40 @@ const ProductCard = ({ data }) => {
   productId.forEach(function (i) {
     count[i] = (count[i] || 0) + 1;
   });
+  console.log("basket", basket);
   // console.log("countFrom productCard",count[data.id])
   //logic to get the item_id from basket if the product_id existt
   const Item_id = [];
   const Id = [];
-  const vdjhg = {};
+  const basketQuantityId = [];
+  const BasketIdWithProductId = {};
   basket.forEach((item) => {
     Item_id.push(item.item_id);
-    // console.log(item);
-
+    // console.log("item",item);
+    basketQuantityId.push(item.quantityId);
     Id.push(item.id);
   });
-  // console.log(Id, Item_id);
+  // console.log("Item_id", Item_id);
+  // Item_id.forEach((item_id, i) => {console.log("itemid",item_id, i)});
 
   // for (let i = 0; i < Id.length; i++) {
-  // vdjhg[Id[i]] = Item_id[i];
-  Item_id.forEach((item_id, i) => (vdjhg[item_id] = Id[i]));
-  // }
-  const result = Object.keys(vdjhg).find(
-    (key) => vdjhg[key] === data.id
+  // BasketIdWithProductId[Id[i]] = Item_id[i];
+  Item_id.forEach(
+    (item_id, i) =>
+      (BasketIdWithProductId[item_id] = [Id[i], basketQuantityId[i]])
   );
-  console.log("resultFrom productCard",vdjhg)
+
+  // console.log("BasketIdWithProductId",BasketIdWithProductId,Item_id,basket)
+  // }
+  const result = Object.keys(BasketIdWithProductId).find(
+    (key) =>
+      JSON.stringify(BasketIdWithProductId[key]) ==
+      JSON.stringify([data.id, quantityId])
+  );
+
+  // console.log("resultFrom productCard", result);
   const productQntSelected = (item) => {
-    setQuantityId(item.id)
+    setQuantityId(item.id);
     setDiscount(item.discount);
     setProductAmount(`${item.quantity}${item.Unit.short_name}`);
     setProductPrice(`${defaultData.base_price}`);
@@ -91,6 +102,9 @@ const ProductCard = ({ data }) => {
       document.body.style.overflow = "unset";
     }
   }, [openAmountPicker]);
+  useEffect(() => {
+   alert("basket")
+  }, [basket])
   return (
     <>
       <React.Fragment>
@@ -251,7 +265,7 @@ const ProductCard = ({ data }) => {
               stage="add"
               count={count[data.id]}
               quantityId={quantityId}
-              // item_id={result}
+              item_id={result}
             />
           </div>
         </div>

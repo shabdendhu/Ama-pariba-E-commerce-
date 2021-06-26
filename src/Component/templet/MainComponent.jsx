@@ -41,7 +41,7 @@ const MainComponent = () => {
   const [{ basket }, dispacher] = useStateValue();
   const { networkStatus, called, loading, data } = useQuery(
     get_basket_by_idQuery,
-    { variables: { id: user_info&&user_info.id } }
+    { variables: { id: user_info && user_info.id } }
   );
   useEffect(() => {
     if (networkStatus === 7) {
@@ -63,6 +63,7 @@ const MainComponent = () => {
                   100
             ),
             item_id: element.id,
+            quantityId: element.quantityOption.id,
           },
         });
       });
