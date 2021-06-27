@@ -4,10 +4,9 @@ import Header from "../../Component/templet/header";
 import Edit from "@material-ui/icons/Edit";
 import Close from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { gql, useMutation } from "@apollo/client";
+import { useDispatch } from "react-redux";
 import {
-  Button,
-  Dialog,
   Drawer,
   FormControl,
   InputLabel,
@@ -16,12 +15,30 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
-import { get_user_details, update_user_details } from "../../constants/api";
-import axios from "axios";
+import {
+  user_info,
+} from "../../constants/storage-keys";
+import { loggedinAction } from "../../actions/authorization";
+const updateUserMutation = gql`
+  mutation ($id: Int, $name: String, $gender: String, $email_id: String) {
+    update_user(
+      input: { id: $id, name: $name, gender: $gender, email_id: $email_id }
+    ) {
+      status
+      message
+      data {
+        id
+        name
+        email_id
+        gender
+        dob
+        user_type
+        mobile_no
+      }
+    }
+  }
+`;
 
-// const Transition = React.forwardRef(function Transition(props, ref) {
-//   return <Slide direction="up" ref={ref} {...props} />;
-// });
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
@@ -34,52 +51,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const MyAccount = () => {
-  const user_info = useSelector((state) => state.authorization.user_info);
-  console.log("user_info",user_info)
+  const User_info = useSelector((state) => state.authorization.user_info);
+  console.log("user_info", User_info);
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [UpdateMutation, updateRes] = useMutation(updateUserMutation);
   const [userDetail, setUserDetail] = useState({
-    mobile_no: user_info.mobile_no,
-    // password: "",
-    email: user_info.email_id,
-    name: user_info.name,
-    gender: user_info.gender,
-    date_of_birth: user_info.dob,
-    img:user_info.img,
+    mobile_no: User_info.mobile_no,
+    email: User_info.email_id,
+    name: User_info.name,
+    gender: User_info.gender,
+    date_of_birth: User_info.dob,
+    img: User_info.img,
   });
+  const rememberUserdata = (response) => {
+    localStorage.setItem(user_info, JSON.stringify(response));
+    dispatch(
+      loggedinAction({
+        is_loggedin: true,
+        loggedin_as: "user",
+        user_info: response,
+      })
+    );
+    // window.history.go("-1");
+    console.log("data1", response);
+  };
   const UpdateUserDetail = () => {
-    axios
-      .post(`${update_user_details}/${user_info.id}`, {
-        mobile_no: userDetail.mobile_no,
-        // password: userDetail.password,
-        email: userDetail.email,
+    UpdateMutation({
+      variables: {
+        id:User_info.id,
         name: userDetail.name,
         gender: userDetail.gender,
-        date_of_birth: userDetail.date_of_birth,
-      })
-      .then((response) => {
-        // getUserDetails();
-      });
+        email_id: userDetail.email,
+        dob: userDetail.date_of_birth,
+        mobile_no:userDetail.mobile_no
+      },
+    }).then((res) => {
+      rememberUserdata(res.data.update_user.data);
+    });
   };
   const openDrawer = () => {
     setOpen(true);
   };
-  // useEffect(() => {
-  //   axios.post(get_user_details, { id: user_info.id }).then((response) => {
-  //     const UserData = response.data.data;
-  //     if (response.data.status) {
-  //       setUserDetail({
-  //         ...userDetail,
-  //         mobile_no: UserData.mobile_no,
-  //         email: UserData.email,
-  //         gender: UserData.gender,
-  //         date_of_birth: UserData.date_of_birth,
-  //         name: UserData.name,
-  //         img: UserData.img,
-  //       });
-  //     }
-  //   });
-  // }, []);
   return (
     <div>
       <Header pagetitle={"My Account"} />

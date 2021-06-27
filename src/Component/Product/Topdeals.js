@@ -34,11 +34,11 @@ const allTopdeals = gql`
         # updated_by
         # is_active
         # category {
-          # id
-          # name
-          # created_by
-          # updated_by
-          # is_active
+        # id
+        # name
+        # created_by
+        # updated_by
+        # is_active
         # }
         # brand {
         #   id
@@ -82,7 +82,7 @@ const TopDeal = ({ item }) => {
   const [productPrice, setProductPrice] = useState(
     `${item.Products.qntity[0].base_price}`
   );
-  const [quantityId,setQuantityId]=useState(item.Products.qntity[0].id)
+  const [quantityId, setQuantityId] = useState(item.Products.qntity[0].id);
   const [openAmountPicker, setOpenAmountPicker] = useState(false);
   const [discountedPrice, setDiscountedPrice] = useState(
     Math.round(
@@ -95,21 +95,6 @@ const TopDeal = ({ item }) => {
   const [productAmount, setProductAmount] = useState(
     `${item.Products.qntity[0].quantity}${item.Products.qntity[0].unit.short_name}`
   );
-
-  //
-  const productQntSelected = (items) => {
-    console.log(items);
-    setQuantityId(items.id)
-    setProductAmount(`${items.quantity}${items.unit.short_name}`);
-    setProductPrice(items.base_price);
-    setDiscountedPrice(
-      Math.round(items.base_price - (items.base_price * items.discount) / 100)
-    );
-    setDiscount(items.discount);
-    setTimeout(() => {
-      setOpenAmountPicker(false);
-    }, 100);
-  };
   const productId = [];
   const productAmt = [];
   basket.forEach((item) => {
@@ -120,6 +105,39 @@ const TopDeal = ({ item }) => {
   productId.forEach(function (i) {
     count[i] = (count[i] || 0) + 1;
   });
+  const Item_id = [];
+  const Id = [];
+  const basketQuantityId = [];
+  const BasketIdWithProductId = {};
+  basket.forEach((item) => {
+    Item_id.push(item.item_id);
+    basketQuantityId.push(item.quantityId);
+    Id.push(item.id);
+  });
+  Item_id.forEach(
+    (item_id, i) =>
+      (BasketIdWithProductId[item_id] = [Id[i], basketQuantityId[i]])
+  );
+  const result = Object.keys(BasketIdWithProductId).find(
+    (key) =>
+      JSON.stringify(BasketIdWithProductId[key]) ==
+      JSON.stringify([item.Products.id, quantityId])
+  );
+  const productQntSelected = (items) => {
+    if (items.unit) {
+      console.log(items);
+      setQuantityId(items.id);
+      setProductAmount(`${items.quantity}${items.unit.short_name}`);
+      setProductPrice(items.base_price);
+      setDiscountedPrice(
+        Math.round(items.base_price - (items.base_price * items.discount) / 100)
+      );
+      setDiscount(items.discount);
+      setTimeout(() => {
+        setOpenAmountPicker(false);
+      }, 100);
+    }
+  };
   useEffect(() => {
     if (openAmountPicker) {
       document.body.style.overflow = "hidden";
@@ -128,6 +146,29 @@ const TopDeal = ({ item }) => {
       document.body.style.overflow = "unset";
     }
   }, [openAmountPicker]);
+  let BasketWithSameProduct = [];
+  basket.forEach((element) => {
+    if (element.id == item.Products.id) {
+      BasketWithSameProduct.unshift(element);
+    }
+  });
+  let currentBasketqntyid = {};
+  if (BasketWithSameProduct[0] && item.Products.qntity) {
+    item.Products.qntity.forEach((element) => {
+      if (element.id == BasketWithSameProduct[0].quantityId) {
+        currentBasketqntyid = element;
+      }
+    });
+  }
+  useEffect(() => {
+    setTimeout(() => {
+      if (BasketWithSameProduct[0]) {
+        if (BasketWithSameProduct[0].quantityId != quantityId) {
+          productQntSelected(currentBasketqntyid);
+        }
+      }
+    }, 100);
+  }, [basket]);
 
   return (
     <>
@@ -160,7 +201,7 @@ const TopDeal = ({ item }) => {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
-            position:'relative'
+            position: "relative",
           }}
         >
           {" "}
@@ -260,6 +301,7 @@ const TopDeal = ({ item }) => {
               stage="add"
               count={count[item.Products.id]}
               quantityId={quantityId}
+              item_id={result}
             />
           </div>
         </div>
@@ -364,6 +406,7 @@ const TopDeal = ({ item }) => {
                 >
                   <Checkbox
                     style={{ padding: "0px" }}
+                    checked={quantityId===item.id}
                     onClick={() => {
                       productQntSelected(item);
                     }}

@@ -35,30 +35,10 @@ const Home = () => {
         <HomeBanner />
         <h3 style={style.header}>SHOP BY ITEM CATEGORY </h3>
         <CategoryCard />
-        {/* for Now It is not available */}
-        {/* <h3 style={style.header}>SHOP BY RECIPES INGRIDIENT'S</h3>
-				<CategoryforHome1 /> */}
         <h3 style={style.header}>TOP DEALS</h3>
         <TopDeals />
         <h3 style={style.header}>SHOP BY SEASON'S BEST</h3>
         <Shopbyseasonsbest />
-        {/* <div
-          style={{
-            textAlign: "center",
-            margin: "0px 3px 0px 0px",
-            paddingBottom: "10px",
-          }}
-        >
-          <span
-            // onClick={() => {
-            // 	history.push(`/shop-by-recipes`);
-            // }}
-            style={style.viewmore}
-          >
-            VIEW MORE
-          </span>
-        </div> */}
-        {/* </Link> */}
         <HomeBanner />
       </div>
     </div>

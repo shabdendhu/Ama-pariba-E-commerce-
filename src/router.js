@@ -12,6 +12,7 @@ const searchresult = lazy(() => import("./pages/shopby/searchresult"));
 const categoty = lazy(() => import("./pages/shop-by-category.js/index"));
 const MyAccount = lazy(() => import("./pages/profile/my-account"));
 const MyHistory = lazy(() => import("./pages/history/my-history"));
+const NotForBigschreen=lazy(()=>import("./Component/templet/notForBigschreen"))
 const routes = [
   { path: "/", exact: true, component: Home },
   { path: "/checkout", exact: true, component: Checkout },
@@ -25,6 +26,7 @@ const routes = [
   { path: "/search-results", exact: true, component: searchresult },
   { path: "/my-account", exact: true, component: MyAccount },
   { path: "/my-history", exact: true, component: MyHistory },
+  { path: "/large-schreen-detected", exact: true, component: NotForBigschreen },
 ];
 
 export default routes;

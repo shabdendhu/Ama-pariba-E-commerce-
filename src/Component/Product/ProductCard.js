@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import { useStateValue } from "../templet/StateProvider";
 import CustomButton from "../templet/AddButton";
-import { get_product_qnt_options, site_url } from "../../constants/api";
 import CloseIcon from "@material-ui/icons/Close";
-import axios from "axios";
 import {
   DialogTitle,
   DialogContent,
@@ -13,16 +11,12 @@ import {
   Card,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { ShoppingBasket } from "@material-ui/icons";
 
 const ProductCard = ({ data }) => {
-  // console.log("productCard", data);
   const history = useHistory();
-// console.log("called")
   const defaultData = data.Quantity[0] ? data.Quantity[0] : { Unit: {} };
   const [openAmountPicker, setOpenAmountPicker] = useState(false);
   const [{ basket }] = useStateValue();
-  // const [productQntOption, setProductQntOption] = useState([]);
   const [discount, setDiscount] = useState(defaultData.discount);
   const [discountedPrice, setDiscountedPrice] = useState(
     Math.round(
@@ -45,8 +39,6 @@ const ProductCard = ({ data }) => {
   productId.forEach(function (i) {
     count[i] = (count[i] || 0) + 1;
   });
-  // console.log("basket", basket);
-  //logic to get the item_id from basket if the product_id existt
   const Item_id = [];
   const Id = [];
   const basketQuantityId = [];
@@ -62,7 +54,7 @@ const ProductCard = ({ data }) => {
   );
   const result = Object.keys(BasketIdWithProductId).find(
     (key) =>
-      JSON.stringify(BasketIdWithProductId[key]) ==
+      JSON.stringify(BasketIdWithProductId[key]) ===
       JSON.stringify([data.id, quantityId])
   );
   const productQntSelected = (item) => {
@@ -89,26 +81,30 @@ const ProductCard = ({ data }) => {
   }, [openAmountPicker]);
   let BasketWithSameProduct = [];
   basket.forEach((element) => {
-    if (element.id == data.id) {
+    if (element.id === data.id) {
       BasketWithSameProduct.unshift(element);
     }
   });
   let currentBasketqntyid = {};
   if (BasketWithSameProduct[0] && data.Quantity) {
     data.Quantity.forEach((element) => {
-      if (element.id == BasketWithSameProduct[0].quantityId) {
+      if (element.id === BasketWithSameProduct[0].quantityId) {
         currentBasketqntyid = element;
       }
     });
   }
+  const productQuantityUpdater = () => {
+    setTimeout(() => {
+      if (BasketWithSameProduct[0]) {
+        if (BasketWithSameProduct[0].quantityId !== quantityId) {
+          productQntSelected(currentBasketqntyid);
+        }
+      }    
+    }, 100);
+  }
 useEffect(() => {
-  setTimeout(() => {
-    if (BasketWithSameProduct[0]) {
-      if (BasketWithSameProduct[0].quantityId != quantityId) {
-        productQntSelected(currentBasketqntyid);
-      }
-    }    
-  }, 100);
+  productQuantityUpdater()
+  // eslint-disable-next-line
 }, [basket])
   return (
     <>
@@ -378,6 +374,7 @@ useEffect(() => {
                   >
                     <Checkbox
                       style={{ padding: "0px" }}
+                      checked={quantityId===item.id}
                       onClick={() => {
                         productQntSelected(item);
                       }}

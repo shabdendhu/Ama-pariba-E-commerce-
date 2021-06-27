@@ -1,9 +1,9 @@
 import { CircularProgress, Grid } from "@material-ui/core";
-import axios from "axios";
+// import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { get_seasons_best_items, site_url } from "../../constants/api";
+// import { get_seasons_best_items, site_url } from "../../constants/api";
 import { gql, useQuery } from "@apollo/client";
 const AllSeasonsBestItemQuery = gql`
 query{

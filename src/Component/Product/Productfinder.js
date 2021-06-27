@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Dialog, Slide } from "@material-ui/core";
 import Search from "@material-ui/icons/Search";
-
-import axios from "axios";
-import { get_search_suggestion } from "../../constants/api";
 import Close from "@material-ui/icons/Close";
-
+import { gql, useLazyQuery } from "@apollo/client";
+const SearchProductQuery = gql`
+query($name:String!){
+  get_product_by_name(name:$name){
+    id
+    name
+  }
+}
+`
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 const SearchResultCard = ({ item }) => {
   return (
     <li
-      key={item.product_id}
+      key={item.id}
       style={{
         padding: "10px 15px",
         display: "flex",
@@ -26,12 +31,12 @@ const SearchResultCard = ({ item }) => {
           fontSize: "19px",
         }}
       >
-        {item.product_name}
+        {item.name}
       </span>
       <button
         onClick={() => {
           // const searchName = item.product_name.replace(/ +/g, "");
-          window.location.href = `/search-results?id=${item.product_id}?name=${item.product_name}`;
+          window.location.href = `/search-results?id=${item.id}?name=${item.name}`;
           // console.log(market);
         }}
         style={{
@@ -55,23 +60,34 @@ const Productfinder = ({ openSearchDilog, onSelectItems }) => {
   const [open, setOpen] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [sarchResultProducts, setSarchResultProducts] = useState([]);
-  const [searchResultRecipe, setSearchResultRecipe] = useState([]);
+  // const [searchResultRecipe, setSearchResultRecipe] = useState([]);
   const handleClose = () => {
     setOpen(false);
   };
+
+  const [SearchProduct, SearchProductRes] = useLazyQuery(
+    SearchProductQuery
+  );
   useEffect(() => {
     if (searchText.length > 0) {
-      axios
-        .post(get_search_suggestion, {
-          product_name: searchText,
-        })
-        .then((response) => {
-          // console.log(response.data.data);
-          setSarchResultProducts(response.data.data.productSuggest);
-          setSearchResultRecipe(response.data.data.recipeSuggest);
-        });
+    //  setTimeout(() => {
+      SearchProduct({
+        variables: {
+          name:searchText
+        }
+      })
+    //  }, 100);
+     
     }
   }, [searchText]);
+  // eslint-disable-next-line
+  console.log(SearchProductRes)
+  useEffect(() => {
+    if (SearchProductRes.data) {
+      console.log(SearchProductRes.data.get_product_by_name)
+      setSarchResultProducts(SearchProductRes.data.get_product_by_name)
+    }
+  }, [SearchProductRes.data]);
   useEffect(() => {
     setOpen(!open);
     // eslint-disable-next-line
@@ -140,14 +156,14 @@ const Productfinder = ({ openSearchDilog, onSelectItems }) => {
               >
                 {sarchResultProducts.length > 0 &&
                   searchText.length > 0 &&
-                  sarchResultProducts.map((market) => (
-                    <SearchResultCard item={market} />
+                  sarchResultProducts.map((item) => (
+                    <SearchResultCard item={item} />
                   ))}
-                {searchResultRecipe.length > 0 &&
+                {/* {searchResultRecipe.length > 0 &&
                   searchText.length > 0 &&
-                  searchResultRecipe.map((market) => (
-                    <SearchResultCard item={market} />
-                  ))}
+                  searchResultRecipe.map((item) => (
+                    <SearchResultCard item={item} />
+                  ))} */}
               </ul>
             </div>
           </div>

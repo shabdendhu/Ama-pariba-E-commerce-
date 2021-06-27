@@ -99,11 +99,11 @@ const ProductsByCategory = () => {
           {products.map((product,index) => (
             <ProductCard
               key={index}
-              id={product.product_id}
-              image={product.image_url}
-              name={product.product_name}
-              amount="10kg"
-              price={product.product_price}
+              // id={product.product_id}
+              // image={product.image_url}
+              // name={product.product_name}
+              // amount="10kg"
+              // price={product.product_price}
               data={product}
             />
           ))}

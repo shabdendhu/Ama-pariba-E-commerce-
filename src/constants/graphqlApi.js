@@ -7,6 +7,7 @@ const get_env_configs = () => {
     } else {
       return {
         graphql_endpoint: "https://amapariba-backend.herokuapp.com/api"
+        // graphql_endpoint: "http://192.168.43.77:9000/api"
       };
     }
   };
