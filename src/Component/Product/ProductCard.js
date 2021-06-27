@@ -13,11 +13,12 @@ import {
   Card,
 } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
+import { ShoppingBasket } from "@material-ui/icons";
 
 const ProductCard = ({ data }) => {
   // console.log("productCard", data);
   const history = useHistory();
-
+// console.log("called")
   const defaultData = data.Quantity[0] ? data.Quantity[0] : { Unit: {} };
   const [openAmountPicker, setOpenAmountPicker] = useState(false);
   const [{ basket }] = useStateValue();
@@ -34,12 +35,6 @@ const ProductCard = ({ data }) => {
   const [productAmount, setProductAmount] = useState(
     `${defaultData.quantity}${defaultData.Unit.short_name}`
   );
-  // const discount=0
-  // data.Quantity.forEach((element, index) => {
-  //   if (element) {
-  //     discount < element.discount && setDiscount(element.discount);
-  //   }
-  // });
   const productId = [];
   const productAmt = [];
   basket.forEach((item) => {
@@ -50,8 +45,7 @@ const ProductCard = ({ data }) => {
   productId.forEach(function (i) {
     count[i] = (count[i] || 0) + 1;
   });
-  console.log("basket", basket);
-  // console.log("countFrom productCard",count[data.id])
+  // console.log("basket", basket);
   //logic to get the item_id from basket if the product_id existt
   const Item_id = [];
   const Id = [];
@@ -59,40 +53,31 @@ const ProductCard = ({ data }) => {
   const BasketIdWithProductId = {};
   basket.forEach((item) => {
     Item_id.push(item.item_id);
-    // console.log("item",item);
     basketQuantityId.push(item.quantityId);
     Id.push(item.id);
   });
-  // console.log("Item_id", Item_id);
-  // Item_id.forEach((item_id, i) => {console.log("itemid",item_id, i)});
-
-  // for (let i = 0; i < Id.length; i++) {
-  // BasketIdWithProductId[Id[i]] = Item_id[i];
   Item_id.forEach(
     (item_id, i) =>
       (BasketIdWithProductId[item_id] = [Id[i], basketQuantityId[i]])
   );
-
-  // console.log("BasketIdWithProductId",BasketIdWithProductId,Item_id,basket)
-  // }
   const result = Object.keys(BasketIdWithProductId).find(
     (key) =>
       JSON.stringify(BasketIdWithProductId[key]) ==
       JSON.stringify([data.id, quantityId])
   );
-
-  // console.log("resultFrom productCard", result);
   const productQntSelected = (item) => {
-    setQuantityId(item.id);
-    setDiscount(item.discount);
-    setProductAmount(`${item.quantity}${item.Unit.short_name}`);
-    setProductPrice(`${defaultData.base_price}`);
-    setDiscountedPrice(
-      Math.round(item.base_price - (item.base_price * item.discount) / 100)
-    );
-    setTimeout(() => {
-      setOpenAmountPicker(false);
-    }, 100);
+    if (item.Unit) {
+      setQuantityId(item.id);
+      setDiscount(item.discount);
+      setProductAmount(`${item.quantity}${item.Unit.short_name}`);
+      setProductPrice(`${defaultData.base_price}`);
+      setDiscountedPrice(
+        Math.round(item.base_price - (item.base_price * item.discount) / 100)
+      );
+      setTimeout(() => {
+        setOpenAmountPicker(false);
+      }, 100);
+    }
   };
   useEffect(() => {
     if (openAmountPicker) {
@@ -102,9 +87,29 @@ const ProductCard = ({ data }) => {
       document.body.style.overflow = "unset";
     }
   }, [openAmountPicker]);
-  useEffect(() => {
-   alert("basket")
-  }, [basket])
+  let BasketWithSameProduct = [];
+  basket.forEach((element) => {
+    if (element.id == data.id) {
+      BasketWithSameProduct.unshift(element);
+    }
+  });
+  let currentBasketqntyid = {};
+  if (BasketWithSameProduct[0] && data.Quantity) {
+    data.Quantity.forEach((element) => {
+      if (element.id == BasketWithSameProduct[0].quantityId) {
+        currentBasketqntyid = element;
+      }
+    });
+  }
+useEffect(() => {
+  setTimeout(() => {
+    if (BasketWithSameProduct[0]) {
+      if (BasketWithSameProduct[0].quantityId != quantityId) {
+        productQntSelected(currentBasketqntyid);
+      }
+    }    
+  }, 100);
+}, [basket])
   return (
     <>
       <React.Fragment>

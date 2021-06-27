@@ -105,7 +105,7 @@ const CustomButton = ({
       },
     }).then((res) => {
       const Res = res.data.create_new_basket;
-      console.log("ADD_TO_BASKET", Res);
+      // console.log("ADD_TO_BASKET", Res);
       dispacher({
         type: "ADD_TO_BASKET",
         item: {
@@ -122,7 +122,7 @@ const CustomButton = ({
     });
   };
   const RemoveProductFromBasket = () => {
-    alert(item_id);
+    // alert(item_id);
     setShowLoader(true);
 
     RemoveMutation({
@@ -131,7 +131,7 @@ const CustomButton = ({
         is_active: 0,
       },
     }).then((res) => {
-      console.log("res", res);
+      // console.log("res", res);
       setShowLoader(false);
     });
     // axios
@@ -150,13 +150,13 @@ const CustomButton = ({
   };
 
   const addToBasket = () => {
-    console.log(isLoggedIn);
+    // console.log(isLoggedIn);
     if (isLoggedIn) {
       AddtoBasketApi();
     } else {
       window.location.href = "/login";
     }
-    console.log(basket);
+    // console.log(basket);
   };
   const removeFromBasket = () => {
     setItemAmt(itemAmt - 1);

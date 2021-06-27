@@ -96,9 +96,9 @@ const ProductsByCategory = () => {
         </div>
       ) : (
         <div>
-          {products.map((product) => (
+          {products.map((product,index) => (
             <ProductCard
-              key={product.product_id}
+              key={index}
               id={product.product_id}
               image={product.image_url}
               name={product.product_name}
