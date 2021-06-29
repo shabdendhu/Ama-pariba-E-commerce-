@@ -37,7 +37,7 @@ const Authentication = () => {
               width: "100%",
               textAlign: "center",
               borderRight: "1px solid black",
-              background: activeTab === 0 ? "green" : "lightgreen",
+              background: activeTab === 0 ? "lightgreen" : "green",
               height: "100%",
               display: "flex",
               alignItems: "center",
@@ -56,7 +56,7 @@ const Authentication = () => {
             style={{
               width: "100%",
               textAlign: "center",
-              background: activeTab === 0 ? "lightgreen" : "green",
+              background: activeTab === 0 ? "green" : "lightgreen",
               height: "100%",
               display: "flex",
               alignItems: "center",
@@ -71,10 +71,10 @@ const Authentication = () => {
             Register
           </div>
         </div>
-        <SwipeableViews enableMouseEvents index={activeTab}>
+        {/* <SwipeableViews  index={activeTab}> */}
           <div>{activeTab === 0 && <Login />}</div>
           <div>{activeTab === 1 && <Register />}</div>
-        </SwipeableViews>
+        {/* </SwipeableViews> */}
       </div>
     </>
   );

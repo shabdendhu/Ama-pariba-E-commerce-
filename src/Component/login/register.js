@@ -14,22 +14,7 @@ import { useGoogleLogin } from "react-google-login";
 import { loggedinAction } from "../../actions/authorization";
 import { google_clint_id } from "../../constants/api";
 import { refreshTokenSetup } from "../../constants/refreshToken";
-const loginMutation = gql`
-  mutation ($email_id: String!, $password: String!) {
-    login(input: { email_id: $email_id, password: $password }) {
-      status
-      message
-      data {
-        id
-        name
-        token
-        email_id
-        user_type
-        mobile_no
-      }
-    }
-  }
-`;
+
 const REGISTER_MUTATION = gql`
   mutation ($email_id: String, $password: String) {
     register(input: { email_id: $email_id, password: $password }) {
@@ -45,13 +30,31 @@ const REGISTER_MUTATION = gql`
     }
   }
 `;
-
+const loginMutation = gql`
+  mutation ($email_id: String!, $password: String!) {
+    login(input: { email_id: $email_id, password: $password }) {
+      status
+      message
+      data {
+        id
+        name
+        email_id
+        gender
+        token
+        dob
+        user_type
+        mobile_no
+      }
+    }
+  }
+`;
 const Register = () => {
   const [error, setError] = useState({ hasError: false, message: "" });
   const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({
     email_id: "",
     password: "",
+    conformPassword: "",
   });
 
   const rememberUserdata = (response) => {
@@ -69,6 +72,8 @@ const Register = () => {
     console.log("data1", response);
   };
   const [RegisterMutation, registerRes] = useMutation(REGISTER_MUTATION);
+  const [LoginMutation, loginRes] = useMutation(loginMutation);
+
   // const [LoginMutation, loginRes] = useMutation(loginMutation);
   // const SignIn = () => {
   //   LoginMutation({
@@ -86,44 +91,65 @@ const Register = () => {
   //   });
   // };
   const resister = () => {
-    RegisterMutation({
-      variables: {
-        email_id: userDetails.email_id,
-        password: userDetails.password,
-      },
-    }).then((res) => {
-      const response = res.data;
-      console.log(response);
-    });
+    if (userDetails.password === userDetails.conformPassword) {
+      RegisterMutation({
+        variables: {
+          email_id: userDetails.email_id,
+          password: userDetails.password,
+        },
+      }).then((res) => {
+        window.location.reload();
+        const response = res.data.register;
+        console.log("response", response);
+        // rememberUserdata(response)
+      });
+    } else {
+      setError({ hasError: true, message: "password doesn't match" });
+    }
   };
-  const onSuccess = (res) => {
-    console.log("Login Success: currentUser:", res);
-    RegisterMutation({
-      variables: {
-        email_id: res.profileObj.email,
-        password: res.profileObj.googleId,
-      },
-    }).then((res) => {
-      const response = res.data;
-      console.log(response);
-    });
-    refreshTokenSetup(res);
-  };
-  const onFailure = (res) => {
-    console.log("Login failed: res:", res);
-    // alert(
-    //   `Failed to login. 😢 Please ping this to repo owner twitter.com/sivanesh_fiz`
-    // );
-  };
-  const { signIn } = useGoogleLogin({
-    onSuccess,
-    onFailure,
-    google_clint_id,
-    isSignedIn: true,
-    accessType: "offline",
-    // responseType: 'code',
-    // prompt: 'consent',
-  });
+  // const onSuccess = (res) => {
+  //   console.log("Login Success: currentUser:", res);
+  //   RegisterMutation({
+  //     variables: {
+  //       email_id: res.profileObj.email,
+  //       password: res.profileObj.googleId,
+  //     },
+  //   }).then((resopnse) => {
+  //     LoginMutation({
+  //       variables: {
+  //         email_id: res.profileObj.email,
+  //         password: res.profileObj.googleId,
+  //       },
+  //     }).then((res) => {
+  //       const response = res.data.login;
+  //       if (response.status) {
+  //         rememberUserdata(res.data.login.data);
+  //       }
+  //       console.log("responses",response)
+  //     });
+  //     // console.log({ variables: {
+  //     //   email_id: res.profileObj.email,
+  //     //   password: res.profileObj.googleId,
+  //     // }})
+  //     // console.log(resopnse)
+  //   });
+  //   refreshTokenSetup(res);
+  // };
+  // const onFailure = (res) => {
+  //   console.log("Login failed: res:", res);
+  // };
+  // const clientId =
+  //   "115704933900-sj32ss7siupsi3041ci1sk3rmi8msn1q.apps.googleusercontent.com";
+
+  // const { signIn } = useGoogleLogin({
+  //   onSuccess,
+  //   onFailure,
+  //   clientId,
+  //   isSignedIn: true,
+  //   accessType: "offline",
+  //   // responseType: 'code',
+  //   // prompt: 'consent',
+  // });
   return (
     <>
       <div
@@ -133,6 +159,7 @@ const Register = () => {
           marginTop: "120px",
         }}
       >
+        <h1>Register</h1>
         <div
           style={{ textAlign: "left", margin: "-5px 28px", fontSize: "17px" }}
         >
@@ -192,6 +219,38 @@ const Register = () => {
       </div>
       <div
         style={{
+          textAlign: "center",
+          width: "-webkit-fill-available",
+          marginTop: "20px",
+        }}
+      >
+        <div
+          style={{ textAlign: "left", margin: "-5px 28px", fontSize: "17px" }}
+        >
+          Conform Password
+        </div>
+        <input
+          style={{
+            width: "-webkit-fill-available",
+            border: "none",
+            background: "black",
+            outline: "none",
+            borderRadius: "22px",
+            height: "39px",
+            fontSize: "17px",
+            padding: "0px 18px 1px 18px",
+            margin: "10px 18px",
+            textTransform: "password",
+            color: "white",
+          }}
+          value={userDetails.conformPassword}
+          onChange={(e) =>
+            setUserDetails({ ...userDetails, conformPassword: e.target.value })
+          }
+        />
+      </div>
+      <div
+        style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -217,8 +276,8 @@ const Register = () => {
         >
           Creat account
         </button>
-        <button
-          onClick={resister}
+        {/* <button
+          onClick={signIn}
           style={{
             cursor: "pointer",
             display: "block",
@@ -230,7 +289,6 @@ const Register = () => {
             borderRadius: "10px",
             borderColor: "transparent",
             backgroundColor: "white",
-            /* box-shadow: 0px 16px 60px rgba(78, 79, 114, 0.1); */
             boxShadow: "0px 16px 60px rgba(78, 79, 114, 0.08)",
             position: "relative",
             outline: "none",
@@ -252,7 +310,7 @@ const Register = () => {
           <span style={{ color: "#4285f4", fontWeight: 700 }}>
             Sign in with Google
           </span>
-        </button>
+        </button> */}
       </div>
 
       <Snackbar
@@ -261,7 +319,7 @@ const Register = () => {
           horizontal: "center",
         }}
         open={error.hasError}
-        autoHideDuration={1000}
+        autoHideDuration={10000}
         onClose={() => {
           setError({ ...Error, hasError: false });
         }}

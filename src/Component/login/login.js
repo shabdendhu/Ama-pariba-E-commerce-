@@ -92,15 +92,15 @@ const Login = () => {
     // );
   };
   const clientId ="115704933900-sj32ss7siupsi3041ci1sk3rmi8msn1q.apps.googleusercontent.com"
-  const { signIn } = useGoogleLogin({
-    onSuccess,
-    onFailure,
-    clientId,
-    isSignedIn: true,
-    accessType: "offline",
-    // responseType: 'code',
-    prompt: 'consent',
-  });
+  // const { signIn } = useGoogleLogin({
+  //   onSuccess,
+  //   onFailure,
+  //   clientId,
+  //   isSignedIn: true,
+  //   accessType: "offline",
+  //   // responseType: 'code',
+  //   prompt: 'consent',
+  // });
   return (
     <>
       <div
@@ -110,6 +110,7 @@ const Login = () => {
           marginTop: "120px",
         }}
       >
+        <h1>Login</h1>
         <div
           style={{ textAlign: "left", margin: "-5px 28px", fontSize: "17px" }}
         >
@@ -167,6 +168,7 @@ const Login = () => {
           }
         />
       </div>
+      
       <div
         style={{
           display: "flex",
@@ -195,7 +197,7 @@ const Login = () => {
         >
           log In
         </button>
-        <button
+        {/* <button
           onClick={signIn}
           style={{
             cursor: "pointer",
@@ -208,7 +210,6 @@ const Login = () => {
             borderRadius: "10px",
             borderColor: "transparent",
             backgroundColor: "white",
-            /* box-shadow: 0px 16px 60px rgba(78, 79, 114, 0.1); */
             boxShadow: "0px 16px 60px rgba(78, 79, 114, 0.08)",
             position: "relative",
             outline: "none",
@@ -230,7 +231,7 @@ const Login = () => {
           <span style={{ color: "#4285f4", fontWeight: 700 }}>
             Sign in with Google
           </span>
-        </button>
+        </button> */}
       </div>
 
       <Snackbar
