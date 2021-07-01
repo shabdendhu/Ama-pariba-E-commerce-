@@ -11,25 +11,30 @@ const myHistoryQuery = gql`
   query ($id: Int) {
     get_allBasket(id: $id) {
       id
+      createdAt
       product {
         id
         name
         image
         rating
-        qntity {
+      }
+      quantityOption {
+        id
+        quantity
+        # product_id
+        base_price
+        unit {
           id
-          quantity
-          unit {
-            id
-            short_name
-          }
+          full_name
+          short_name
         }
       }
     }
   }
 `;
 
-const HistoryCard = () => {
+const HistoryCard = ({ item }) => {
+  // console.log("itemitem",item)
   return (
     <Card
       style={{
@@ -37,10 +42,10 @@ const HistoryCard = () => {
         height: "7ch",
         display: "flex",
         position: "relative",
-        padding:"5px"
+        padding: "5px",
       }}
       onClick={() => {
-        window.location.href = `/search-results?id=1?name=apple`;
+        window.location.href = `/search-results?id=${item.product.id}?name=${item.product.name}`;
       }}
     >
       {/* <div style={{display:"flex"}}> */}
@@ -52,13 +57,18 @@ const HistoryCard = () => {
           justifyContent: "center",
         }}
       >
-        <img style={{ height: "50px" }} src="apple.png" />
+        <img style={{ height: "50px" }} src={item.product.image} />
       </div>
       <div style={{ flex: 5 }}>
         <div style={{ margin: "9px 4px -2px" }}>
-          <span style={{ fontSize: "17px", fontFamily: "fantasy" }}>Apple</span>
+          <span style={{ fontSize: "17px", fontFamily: "fantasy" }}>
+            {item.product.name}
+          </span>
           <br />
-          <span style={{ fontWeight: 400, paddingTop: "2px" }}>1kg</span>
+          <span style={{ fontWeight: 400, paddingTop: "2px" }}>
+            {item.quantityOption.quantity}
+            {item.quantityOption.unit.short_name}
+          </span>
         </div>
         <div
           style={{
@@ -67,10 +77,10 @@ const HistoryCard = () => {
             position: "absolute",
             right: 0,
             paddingRight: "5px",
-            marginBottom:"15px"
+            marginBottom: "15px",
           }}
         >
-          <span>On:</span> 31-Jul-1999
+          <span>On:</span> {item.createdAt}
         </div>
       </div>
       {/* </div> */}
@@ -88,14 +98,15 @@ const HistoryCard = () => {
 };
 const MyHistory = () => {
   const user_info = useSelector((state) => state.authorization.user_info);
-  const [prooductHistory, setProductHistory] = useState([]);
+  const [productHistory, setProductHistory] = useState([]);
   const { networkStatus, called, loading, data } = useQuery(myHistoryQuery, {
     variables: { id: user_info && user_info.id },
   });
 
   useEffect(() => {
     if (networkStatus === 7) {
-      console.log("history", data.get_allBasket);
+      // console.log("history", data.get_allBasket);
+      setProductHistory(data.get_allBasket);
     }
   }, [networkStatus]);
   // useEffect(() => {
@@ -110,12 +121,10 @@ const MyHistory = () => {
     <div>
       <Header pagetitle="My History" />
       <div style={{ marginTop: "55px", background: "#efefef" }}>
-        {/* {prooductHistory.map((item, index) => (
-          <ProductCard key={item.product_id} data={item} />
-        ))} */}
-        <HistoryCard />
-        <HistoryCard />
-        <HistoryCard />
+        {productHistory.map((item) => (
+          // <ProductCard key={item.product_id} data={item} />
+          <HistoryCard key={item.id} item={item} />
+        ))}
       </div>
     </div>
   );
