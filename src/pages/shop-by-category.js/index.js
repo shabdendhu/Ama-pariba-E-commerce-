@@ -183,7 +183,7 @@ const ShopByItemCategory = () => {
   return (
     <>
       <Header pagetitle={"pagetitle"} />
-      <div style={{ marginTop: "50px" }}>
+      <div style={{ }}>
         {/* <HomeBanner /> */}
         {/* <ProductsByCategory /> */}
 

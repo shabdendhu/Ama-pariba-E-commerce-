@@ -15,7 +15,7 @@ const Authentication = () => {
       <div
         style={{
           backgroundColor: "#efefef",
-          marginTop: "48px",
+          // marginTop: "48px",
           width: "-webkit-fill-available",
         }}
       >

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import routes from "../../router";
 import PageSkeleton from "./skeleton";
 import { useEffect } from "react";
@@ -9,8 +9,10 @@ import {
   Redirect,
 } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { gql, useQuery } from "@apollo/client";
+import { deviceRecognizer } from "../../actions/deviceRecognizer";
 
 const get_basket_by_idQuery = gql`
   query ($id: Int!) {
@@ -37,8 +39,10 @@ const get_basket_by_idQuery = gql`
   }
 `;
 const MainComponent = () => {
+  const dispatch = useDispatch();
   const user_info = useSelector((state) => state.authorization.user_info);
   const [{ basket }, dispacher] = useStateValue();
+  const [width, setWidth] = useState(window.innerWidth);
   const { networkStatus, called, loading, data } = useQuery(
     get_basket_by_idQuery,
     { variables: { id: user_info && user_info.id } }
@@ -69,6 +73,25 @@ const MainComponent = () => {
       });
     }
   }, [networkStatus]);
+  function handleWindowSizeChange() {
+    setWidth(window.innerWidth);
+  }
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowSizeChange);
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange);
+    };
+  }, []);
+
+  let isMobile = width <= 884 ? true : false;
+
+  useEffect(() => {
+    dispatch(
+      deviceRecognizer({
+        is_mobile: isMobile,
+      })
+    );
+  }, [isMobile]);
   return (
     // <Provider store={store}>
 

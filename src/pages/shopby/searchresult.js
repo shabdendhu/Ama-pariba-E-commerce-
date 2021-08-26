@@ -79,7 +79,7 @@ const Searchresult = () => {
   return (
     <div>
       <Header pagetitle={searchText} />
-      <div style={{ marginTop: "50px" }}>
+      <div >
         <HomeBanner />
         {searchProduct.map((item, index) => (
           <ProductCard key={index} data={item} />

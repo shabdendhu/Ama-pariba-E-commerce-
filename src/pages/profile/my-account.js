@@ -97,7 +97,7 @@ const MyAccount = () => {
   return (
     <div>
       <Header pagetitle={"My Account"} />
-      <div style={{ marginTop: "48px" }}>
+      <div >
         <div
           style={{
             display: "flex",

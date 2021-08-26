@@ -120,7 +120,7 @@ const MyHistory = () => {
   return (
     <div>
       <Header pagetitle="My History" />
-      <div style={{ marginTop: "55px", background: "#efefef" }}>
+      <div style={{ marginTop: "5px", background: "#efefef" }}>
         {productHistory.map((item) => (
           // <ProductCard key={item.product_id} data={item} />
           <HistoryCard key={item.id} item={item} />

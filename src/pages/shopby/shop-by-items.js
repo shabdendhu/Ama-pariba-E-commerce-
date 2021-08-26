@@ -17,7 +17,7 @@ const ShopByItems = () => {
 	return (
 		<div>
 			<Header pagetitle="Items Categorys" />
-			<div style={{ marginTop: "55px" }}>
+			<div style={{ marginTop: "5px" }}>
 				<h3 style={style.header}>SHOP BY ITEM CATEGORY </h3>
 
 				<CategoryCard all={true} />

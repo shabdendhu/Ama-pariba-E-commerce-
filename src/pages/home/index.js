@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import CategoryCard from "../../Component/category/categoryCard";
 import Shopbyseasonsbest from "../../Component/Product/Shopbyseasonsbest";
 import TopDeals from "../../Component/Product/Topdeals";
@@ -27,20 +28,27 @@ const style = {
     textDecoration: "none",
   },
 };
+
 const Home = () => {
+  const deviceType = useSelector((state) => state.authorization.device_type);
+  console.log("deviceType", deviceType);
   return (
     <div>
       <Header />
-      <div style={{ marginTop: "50px", background: "#efefef" }}>
-        <HomeBanner />
-        <h3 style={style.header}>SHOP BY ITEM CATEGORY </h3>
-        <CategoryCard />
-        <h3 style={style.header}>TOP DEALS</h3>
-        <TopDeals />
-        <h3 style={style.header}>SHOP BY SEASON'S BEST</h3>
-        <Shopbyseasonsbest />
-        <HomeBanner />
-      </div>
+      {deviceType === "mobile" ? (
+        <div style={{ background: "#efefef" }}>
+          <HomeBanner />
+          <h3 style={style.header}>SHOP BY ITEM CATEGORY </h3>
+          <CategoryCard />
+          <h3 style={style.header}>TOP DEALS</h3>
+          <TopDeals />
+          <h3 style={style.header}>SHOP BY SEASON'S BEST</h3>
+          <Shopbyseasonsbest />
+          <HomeBanner />
+        </div>
+      ) : (
+        <h1>PLEASE USE MOBILE PHONE DESKTOP VERSION NOT READY YET</h1>
+      )}
     </div>
   );
 };

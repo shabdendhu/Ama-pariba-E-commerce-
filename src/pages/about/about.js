@@ -5,7 +5,7 @@ const About = () => {
 	return (
 		<>
 			<Header pagetitle="About" />
-			<div style={{ marginTop: "50px" }}>
+			<div style={{  }}>
 				<div style={{ width: "" }}>jgbuhjhbkh</div>
 			</div>
 		</>

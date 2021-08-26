@@ -118,7 +118,7 @@ const Checkout = () => {
                 <EmptyBasketNotication />
               </div>
             ) : (
-              <div style={{ background: "#efefef", marginTop: "50px" }}>
+              <div style={{ background: "#efefef" }}>
                 {basket.length > 0 && (
                   <div
                   // style={{ position: "fixed" }}

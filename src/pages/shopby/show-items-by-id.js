@@ -24,7 +24,7 @@ const ShopByCategory = () => {
   return (
     <>
       <Header pagetitle={pagetitle} />
-      <div style={{ marginTop: "50px" }}>
+      <div >
         <HomeBanner />
         <ProductsByCategory />
       </div>

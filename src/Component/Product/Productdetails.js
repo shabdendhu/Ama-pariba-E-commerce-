@@ -58,7 +58,7 @@ const Productdetails = ({ openDetailDilog }) => {
       TransitionComponent={Transition}
     >
       <Header pagetitle={pagetitle} />
-      <div style={{ marginTop: "50px", background: "white" }}>
+      <div style={{  background: "white" }}>
         <div
           style={{
             padding: "5px",
