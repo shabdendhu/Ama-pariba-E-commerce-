@@ -25,7 +25,7 @@ const SubManue = ({ x }) => {
     { name: "Product link" },
     { name: "Product link" },
   ];
-  function changeBackground(e) {
+   function changeBackground(e) {
     // e.target.style.background= "white"
     e.target.style.color= "green"
     // e.target.style.borderRadius= "5px"
@@ -211,10 +211,12 @@ useEffect(() => {
       {/* manue options */}
       <div
         style={{
-          background: "#ececed",
+          background: "white",
           padding: "5px 20px",
           display: "flex",
           justifyContent: "space-around",
+          boxShadow: scrollPosition>80?"0px 4px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)":"",
+          marginBottom:'20px'
         }}
       >
         <SubManue x={1} />

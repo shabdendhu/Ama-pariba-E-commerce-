@@ -5,6 +5,7 @@ import Shopbyseasonsbest from "../../Component/Product/Shopbyseasonsbest";
 import TopDeals from "../../Component/Product/Topdeals";
 import HomeBanner from "../../Component/templet/banner";
 import Header from "../../Component/templet/header";
+import DesktopHome from '../../Component/home/index'
 const style = {
   header: {
     // background: "#efefef",
@@ -47,7 +48,7 @@ const Home = () => {
           <HomeBanner />
         </div>
       ) : (
-        <h1>PLEASE USE MOBILE PHONE DESKTOP VERSION NOT READY YET</h1>
+       <DesktopHome/>
       )}
     </div>
   );

@@ -19,81 +19,28 @@ import axios from "axios";
 import CustomButton from "../templet/AddButton";
 import { useStateValue } from "../templet/StateProvider";
 import { gql, useQuery } from "@apollo/client";
-const allTopdeals = gql`
-  query {
-    get_allTopDeals {
-      id
-      product_id
-      Products {
-        id
-        name
-        # brand_id
-        image
-        # rating
-        # created_by
-        # updated_by
-        # is_active
-        # category {
-        # id
-        # name
-        # created_by
-        # updated_by
-        # is_active
-        # }
-        # brand {
-        #   id
-        #   name
-        #   company_name
-        #   ratings
-        #   created_by
-        #   updated_by
-        #   is_active
-        # }
-        qntity {
-          id
-          quantity
-          # product_id
-          base_price
-          # unit_id
-          discount
-          # created_by
-          # updated_by
-          # is_active
-          unit {
-            id
-            full_name
-            short_name
-            # created_by
-            # updated_by
-            # is_active
-          }
-        }
-      }
-    }
-  }
-`;
-export const TopDeal = ({ item }) => {
-  // console.log(item.Products.qntity[0].quantity.unit.short_name)
+const LProductCard = ({ item }) => {
+  // console.log(item.qntity[0].quantity.unit.short_name)
   const [{ basket }] = useStateValue();
   const [productQntOption, setProductQntOption] = useState(
-    item.Products.qntity
+    item.qntity
   );
-  const [discount, setDiscount] = useState(item.Products.qntity[0].discount);
+  const [discount, setDiscount] = useState(item.qntity[0].discount);
   const [productPrice, setProductPrice] = useState(
-    `${item.Products.qntity[0].base_price}`
+    `${item.qntity[0].base_price}`
   );
-  const [quantityId, setQuantityId] = useState(item.Products.qntity[0].id);
+  const [quantityId, setQuantityId] = useState(item.qntity[0].id);
   const [openAmountPicker, setOpenAmountPicker] = useState(false);
   const [discountedPrice, setDiscountedPrice] = useState(
     Math.round(
-      item.Products.qntity[0].base_price -
-        (item.Products.qntity[0].base_price *
-          item.Products.qntity[0].discount) /
+      item.qntity[0].base_price -
+        (item.qntity[0].base_price *
+          item.qntity[0].discount) /
           100
     )
   );
   const [productAmount, setProductAmount] = useState(
-    `${item.Products.qntity[0].quantity}${item.Products.qntity[0].unit.short_name}`
+    `${item.qntity[0].quantity}${item.qntity[0].unit.short_name}`
   );
   const productId = [];
   const productAmt = [];
@@ -121,7 +68,7 @@ export const TopDeal = ({ item }) => {
   const result = Object.keys(BasketIdWithProductId).find(
     (key) =>
       JSON.stringify(BasketIdWithProductId[key]) ==
-      JSON.stringify([item.Products.id, quantityId])
+      JSON.stringify([item.id, quantityId])
   );
   const productQntSelected = (items) => {
     if (items.unit) {
@@ -148,13 +95,13 @@ export const TopDeal = ({ item }) => {
   }, [openAmountPicker]);
   let BasketWithSameProduct = [];
   basket.forEach((element) => {
-    if (element.id == item.Products.id) {
+    if (element.id == item.id) {
       BasketWithSameProduct.unshift(element);
     }
   });
   let currentBasketqntyid = {};
-  if (BasketWithSameProduct[0] && item.Products.qntity) {
-    item.Products.qntity.forEach((element) => {
+  if (BasketWithSameProduct[0] && item.qntity) {
+    item.qntity.forEach((element) => {
       if (element.id == BasketWithSameProduct[0].quantityId) {
         currentBasketqntyid = element;
       }
@@ -175,15 +122,17 @@ export const TopDeal = ({ item }) => {
       <Card
         style={{
           flexShrink: 0,
-          marginRight: "10px",
+          // marginRight: "10px",
           padding: "10px",
-          maxWidth: "170px",
+          // maxWidth: "170px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
-          width: "132px",
-          height: "250px",
+          width: "200px",
+          height: "300px",
+          borderRadius: "12px",
+          border: "1px solid #cbc1ab",
         }}
       >
         <div
@@ -195,13 +144,14 @@ export const TopDeal = ({ item }) => {
             borderRadius: "10px",
             background: "rgb(253, 253, 253)",
             boxShadow: "rgb(0 0 0 / 5%) 0px 5px 15px",
-            height: "111px",
-            width: "100px",
+            height: "150px",
+            width: "150px",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
             position: "relative",
+            overflow: "hidden",
           }}
         >
           {" "}
@@ -227,9 +177,9 @@ export const TopDeal = ({ item }) => {
             {discount}% off
           </div>
           <img
-            src={item.Products.image}
-            alt={item.product_name}
-            style={{ width: "100px" }}
+            src={item.image}
+            alt={item.name}
+            style={{ width: "140px" }}
           />
         </div>
         <div
@@ -237,23 +187,27 @@ export const TopDeal = ({ item }) => {
             padding: "7px 0px 0px 0px",
             display: "flex",
             flexDirection: "column",
+            alignItems: "center",
           }}
         >
           <span style={{ fontSize: "17px", paddingBottom: "5px" }}>
-            {item.product_name}
-          </span>
-          <span>
-            {" "}
-            <del style={{ color: "#5d5b5b", fontSize: "14px" }}>
+            {item.name}
+            <del
+              style={{ color: "#5d5b5b", fontSize: "14px", paddingLeft: "5px" }}
+            >
               ₹{productPrice}
             </del>
             <span style={{ marginLeft: "15px" }}>₹{discountedPrice}</span>
           </span>
-          <div
-            onClick={() => {
-              // productAmtApi();
-              setOpenAmountPicker(true);
-            }}
+          {/* <span>
+              {" "}
+             
+            </span> */}
+          <select
+            //   onClick={() => {
+            //     // productAmtApi();
+            //     setOpenAmountPicker(true);
+            //   }}
             style={{
               borderRadius: "5px",
               border: "1px solid #0080003b",
@@ -265,41 +219,64 @@ export const TopDeal = ({ item }) => {
               height: "25px",
               justifyContent: "center",
               marginTop: "7px",
+              width: "170px",
+              outline: "none",
             }}
           >
-            <span
+            <option
               style={
                 {
                   // flex: 1
                 }
               }
             >
-              {productAmount}
-            </span>
-            <span
-              style={{
-                flex: 1,
-                textAlign: "end",
-                paddingRight: "8px",
-              }}
+              {/* {productAmount} */}
+              100g
+            </option>
+            <option
+              style={
+                {
+                  // flex: 1
+                }
+              }
             >
-              <KeyboardArrowDownIcon style={{ fontSize: "15px" }} />
-            </span>
-          </div>
+              {/* {productAmount} */}
+              200g
+            </option>
+            <option
+              style={
+                {
+                  // flex: 1
+                }
+              }
+            >
+              {/* {productAmount} */}
+              300g
+            </option>
+            {/* <span
+                style={{
+                  flex: 1,
+                  textAlign: "end",
+                  paddingRight: "8px",
+                }}
+              >
+                <KeyboardArrowDownIcon style={{ fontSize: "15px" }} />
+              </span> */}
+          </select>
           <div
             style={{
               margin: "10px 0px -5px -5px",
             }}
           >
             <CustomButton
-              id={item.Products.id}
-              image={item.Products.image_url}
-              name={item.Products.product_name}
+              id={item.id}
+              image={item.image_url}
+              name={item.product_name}
               amount={productAmount}
               price={parseInt(discountedPrice)}
               width="117px"
               stage="add"
-              count={count[item.Products.id]}
+              count={count[item.id]}
               quantityId={quantityId}
               item_id={result}
             />
@@ -334,7 +311,7 @@ export const TopDeal = ({ item }) => {
                 color: "#a70606",
               }}
             >
-              {item.Products.name}
+              {item.name}
             </span>
             <span
               onClick={() => {
@@ -406,7 +383,7 @@ export const TopDeal = ({ item }) => {
                 >
                   <Checkbox
                     style={{ padding: "0px" }}
-                    checked={quantityId===item.id}
+                    checked={quantityId === item.id}
                     onClick={() => {
                       productQntSelected(item);
                     }}
@@ -420,58 +397,4 @@ export const TopDeal = ({ item }) => {
     </>
   );
 };
-
-const TopDeals = () => {
-  const [showloader, setShowloader] = useState(false);
-  const [products, setProducts] = useState([]);
-  const { networkStatus, called, loading, data } = useQuery(allTopdeals);
-  // useEffect(() => {
-  //   setShowloader(true);
-  //   axios.get(get_top_deals).then((response) => {
-  //     setProducts(response.data.data);
-  //     if (response.data.status) {
-  //       setShowloader(false);
-  //     }
-  //     // console.log(response.data.data);
-  //   });
-  // }, []);
-  useEffect(() => {
-    setShowloader(true);
-    if (networkStatus === 7) {
-      console.log("data.get_allTopDeals", data.get_allTopDeals);
-      setProducts(data.get_allTopDeals);
-      setShowloader(false);
-    }
-  }, [networkStatus]);
-  return (
-    <>
-      {showloader ? (
-        <div style={{ textAlign: "center" }}>
-          <CircularProgress />
-        </div>
-      ) : (
-        <div
-          className="hide-scroll-bar"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            overflowX: "auto",
-            width: "100%",
-            margin: "10px 0px",
-          }}
-        >
-          {products.map((item, index) => (
-            <TopDeal key={index} item={item} />
-          ))}
-        </div>
-      )}
-
-      {/* {loading && */}
-      {/* <div style={{ textAlign: "center" }}>
-        <CircularProgress style={{ height: 32, width: 32, color: "#168388" }} />
-      </div> */}
-      {/* } */}
-    </>
-  );
-};
-export default TopDeals;
+export default LProductCard;
