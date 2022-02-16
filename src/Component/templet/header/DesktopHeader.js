@@ -8,12 +8,103 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PersonIcon from "@material-ui/icons/Person";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { styled } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { useStateValue } from "../StateProvider";
-
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import TooltipOption from "./TooltipOption";
+import { useHistory } from "react-router-dom";
+const style = {
+  shadowHeader: {
+    height: "75px",
+    WebkitBoxShadow: "0 8px 24px 0 rgb(23 50 101 / 30%)",
+    display: "flex",
+    alignItems: "center",
+    padding: "0px 15px",
+    background: "white",
+    position: "fixed",
+    width: "100%",
+    zIndex: 99,
+    top: 0,
+  },
+  nonShadowheader: { height: "75px" },
+  logo: {
+    height: "30px",
+    margin: "0px 70px 0px 0px",
+    cursor: "pointer",
+  },
+  headerOption: {
+    fontWeight: "500",
+    marginRight: "32px",
+    display: "flex",
+    cursor: "pointer",
+    alignItems: "center",
+  },
+  interestBotton: {
+    border: "none",
+    outline: "none",
+    background: "#860090",
+    width: "140px",
+    height: "33px",
+    borderRadius: "8px",
+    color: "white",
+    fontSize: "16px",
+    padding: "5px",
+    position: "absolute",
+    right: "20px",
+    cursor: "pointer",
+  },
+  login: {
+    fontWeight: "500",
+    position: "absolute",
+    right: "200px",
+  },
+};
+const options = {
+  allProducts: [
+    "Life Insuranse",
+    "Health Insuranse",
+    "Bike Insuranse",
+    "Car Insuranse",
+    "business Insurance",
+  ],
+  contacts: [
+    "Home Loan",
+    "Business Loan",
+    "House Loan",
+    "Bike Loan",
+    "Car Loan",
+  ],
+  support: ["Founders", "Need Help", "About Us", "Our Partners"],
+};
+const menuOptions = [
+  {
+    name: "Insuranse",
+    children: options.allProducts,
+  },
+  {
+    name: "Loans",
+    children: options.contacts,
+  },
+  {
+    name: "Support",
+    children: options.support,
+  },
+];
+const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}));
 const SubManue = ({ x }) => {
   const [showList, setShowList] = useState(false);
-  const [showStyle,setShowStyle]=useState(false)
+  const [showStyle, setShowStyle] = useState(false);
   const data = [
     { name: "Product link" },
     { name: "Product link" },
@@ -25,14 +116,14 @@ const SubManue = ({ x }) => {
     { name: "Product link" },
     { name: "Product link" },
   ];
-   function changeBackground(e) {
+  function changeBackground(e) {
     // e.target.style.background= "white"
-    e.target.style.color= "green"
+    e.target.style.color = "green";
     // e.target.style.borderRadius= "5px"
   }
   function revertBackgroung(e) {
     // e.target.style.background= ""
-    e.target.style.color= ""
+    e.target.style.color = "";
     // e.target.style.borderRadius= ""
   }
   return (
@@ -68,9 +159,12 @@ const SubManue = ({ x }) => {
           }}
         >
           {data.map((e) => (
-            <div style={{ padding: "5px" }}  onMouseEnter={changeBackground} onMouseLeave={revertBackgroung}>
-              <span
-              >{`${e.name}${x}`}</span>
+            <div
+              style={{ padding: "5px" }}
+              onMouseEnter={changeBackground}
+              onMouseLeave={revertBackgroung}
+            >
+              <span>{`${e.name}${x}`}</span>
               <br />
             </div>
           ))}
@@ -80,28 +174,29 @@ const SubManue = ({ x }) => {
   );
 };
 const DesktopHeader = () => {
+  const history = useHistory();
   const is_loggedin = useSelector((state) => state.authorization.is_loggedin);
   const [{ basket }] = useStateValue();
   const [scrollPosition, setScrollPosition] = useState(0);
-const handleScroll = () => {
+  const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
-};
+  };
 
-useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-        window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
-}, []);
-useEffect(() => {
- console.log("scrollPosition",scrollPosition)
-}, [scrollPosition])
+  }, []);
+  useEffect(() => {
+    console.log("scrollPosition", scrollPosition);
+  }, [scrollPosition]);
   return (
     <div
       style={{
-        position: scrollPosition>80?"fixed":'',
+        position: scrollPosition > 80 ? "fixed" : "",
         zIndex: 99,
         width: "-webkit-fill-available",
         top: 0,
@@ -171,7 +266,21 @@ useEffect(() => {
           >
             {/* signup */}
             <PersonIcon style={{ fontSize: "30px" }} />
-            Sign in / Sign up
+            <span
+              onClick={() => {
+                history.push("/login");
+              }}
+            >
+              Sign in
+            </span>{" "}
+            /{" "}
+            <span
+              onClick={() => {
+                history.push("/login");
+              }}
+            >
+              Sign up
+            </span>
             <span style={{ margin: "14px 0px 0px 23px" }}>
               <Link
                 to="/checkout"
@@ -209,17 +318,27 @@ useEffect(() => {
         </div>
       </div>
       {/* manue options */}
-      <div
+      {/* <div
         style={{
           background: "white",
           padding: "5px 20px",
           display: "flex",
           justifyContent: "space-around",
-          boxShadow: scrollPosition>80?"0px 4px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)":"",
-          marginBottom:'20px'
+          boxShadow:
+            scrollPosition > 80
+              ? "0px 4px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)"
+              : "",
+          marginBottom: "20px",
         }}
       >
-        <SubManue x={1} />
+        {menuOptions.map((e, i) => (
+          <HtmlTooltip key={i} title={<TooltipOption options={e.children} />}>
+            <span style={style.headerOption}>
+              {e.name} <ArrowDropDownIcon />
+            </span>
+          </HtmlTooltip>
+        ))}
+         <SubManue x={1} />
         <SubManue x={2} />
         <SubManue x={3} />
         <SubManue x={4} />
@@ -229,8 +348,8 @@ useEffect(() => {
         <SubManue x={8} />
         <SubManue x={9} />
         <SubManue x={10} />
-        <SubManue x={11} />
-      </div>
+        <SubManue x={11} /> 
+      </div> */}
     </div>
   );
 };

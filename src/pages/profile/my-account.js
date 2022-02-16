@@ -34,6 +34,7 @@ const updateUserMutation = gql`
         dob
         user_type
         mobile_no
+        profile_logo
       }
     }
   }
@@ -63,7 +64,7 @@ const MyAccount = () => {
     name: User_info.name,
     gender: User_info.gender,
     date_of_birth: User_info.dob,
-    img: User_info.img,
+    profile_logo: User_info.profile_logo,
   });
   const rememberUserdata = (response) => {
     localStorage.setItem(user_info, JSON.stringify(response));
@@ -108,7 +109,7 @@ const MyAccount = () => {
           }}
         >
           <span style={{ flex: 1 }}>
-            <img style={{ height: "60px" }} src={userDetail.img} />
+            <img style={{ height: "60px" }} src={userDetail.profile_logo} />
             <span
               style={{
                 position: "absolute",

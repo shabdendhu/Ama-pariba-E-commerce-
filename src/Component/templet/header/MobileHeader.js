@@ -185,7 +185,7 @@ const MobileHeader = ({ pagetitle }) => {
               >
                 {pagetitle
                   ? pagetitle.length > 15
-                    ? `${pagetitle.substring(0, 10)}...`
+                    ? `${pagetitle.substring(0, 16)}...`
                     : pagetitle
                   : "ଆମ ପରିବା"}
               </Link>

@@ -25,6 +25,7 @@ const loginMutation = gql`
         dob
         user_type
         mobile_no
+        profile_logo
       }
     }
   }

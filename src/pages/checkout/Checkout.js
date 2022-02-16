@@ -130,7 +130,7 @@ const Checkout = () => {
                         height: "40px",
                         padding: "10px",
                         paddingBottom: "10px",
-                        backgroundColor: "gray",
+                        backgroundColor: "#2f8a74",
                         position: "fixed",
                         bottom: 0,
                         color: "white",
@@ -163,15 +163,7 @@ const Checkout = () => {
                                 onClick={() => {
                                   makeOrder();
                                 }}
-                                style={{
-                                  outline: "none",
-                                  border: "none",
-                                  background: "#9e2821",
-                                  color: "white",
-                                  height: "30px",
-                                  width: "113px",
-                                  borderRadius: "18px",
-                                }}
+                                className="customButton"
                               >
                                 CHECKOUT
                               </button>

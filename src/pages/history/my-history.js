@@ -61,11 +61,11 @@ const HistoryCard = ({ item }) => {
       </div>
       <div style={{ flex: 5 }}>
         <div style={{ margin: "9px 4px -2px" }}>
-          <span style={{ fontSize: "17px", fontFamily: "fantasy" }}>
+          <span style={{ fontSize: "17px", }}>
             {item.product.name}
           </span>
           <br />
-          <span style={{ fontWeight: 400, paddingTop: "2px" }}>
+          <span style={{ fontWeight: 400, paddingTop: "2px",fontSize:'12px' }}>
             {item.quantityOption.quantity}
             {item.quantityOption.unit.short_name}
           </span>
@@ -77,10 +77,10 @@ const HistoryCard = ({ item }) => {
             position: "absolute",
             right: 0,
             paddingRight: "5px",
-            marginBottom: "15px",
+            bottom: "5px",
           }}
         >
-          <span>On:</span> {item.createdAt}
+          <span style={{color:'green'}}>On:</span> {item.createdAt}
         </div>
       </div>
       {/* </div> */}

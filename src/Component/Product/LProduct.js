@@ -20,6 +20,7 @@ import CustomButton from "../templet/AddButton";
 import { useStateValue } from "../templet/StateProvider";
 import { gql, useQuery } from "@apollo/client";
 const LProductCard = ({ item }) => {
+  console.log('jnslk',item.qntity[0])
   // console.log(item.qntity[0].quantity.unit.short_name)
   const [{ basket }] = useStateValue();
   const [productQntOption, setProductQntOption] = useState(

@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.address{
+  display: flex;
+  align-items: flex-start;
+  margin-top: 10px;
+  background: white;
+  padding: 5px;
+  margin: 6px 6px;
+  border-left: 2px solid black;
+  border-radius: 10px;
+  border-right: 1px solid gray;
+}
+.customButton{
+  outline: none;
+  border: none;
+  background: rgb(158, 40, 33);
+  color: white;
+  height: 30px;
+  width: 113px;
+  border-radius: 18px;
+}

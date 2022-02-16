@@ -20,7 +20,6 @@ ReactDOM.render(
         <App />
       </StateProvider>
     </Provider>
-    ,
   </React.Fragment>,
   document.getElementById("root")
 );
