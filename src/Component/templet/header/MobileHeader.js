@@ -345,7 +345,7 @@ const MobileHeader = ({ pagetitle }) => {
                   style={menuStyle.listItem}
                 >
                   <span style={menuStyle.listItemtext}> Need Help</span>
-                </ListItem>{" "}
+                </ListItem>
                 <Divider />
                 <ListItem
                   button
@@ -369,7 +369,7 @@ const MobileHeader = ({ pagetitle }) => {
                       style={menuStyle.listItem}
                     >
                       <span style={menuStyle.listItemtext}> My History</span>
-                    </ListItem>{" "}
+                    </ListItem>
                     <Divider />
                     <ListItem
                       button
@@ -380,7 +380,7 @@ const MobileHeader = ({ pagetitle }) => {
                       style={menuStyle.listItem}
                     >
                       <span style={menuStyle.listItemtext}> My Account</span>
-                    </ListItem>{" "}
+                    </ListItem>
                     <Divider />
                     <ListItem
                       button
@@ -393,7 +393,6 @@ const MobileHeader = ({ pagetitle }) => {
                   </>
                 ) : (
                   <>
-                    {" "}
                     <ListItem
                       button
                       onClick={() => {

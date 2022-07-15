@@ -45,7 +45,7 @@ const MainComponent = () => {
   const [width, setWidth] = useState(window.innerWidth);
   const { networkStatus, called, loading, data } = useQuery(
     get_basket_by_idQuery,
-    { variables: { id: user_info && user_info.id } }
+    { variables: { id: user_info ? user_info.id:37 } }
   );
   useEffect(() => {
     if (networkStatus === 7) {
